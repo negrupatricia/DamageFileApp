@@ -11,20 +11,20 @@
                 <form:SimpleForm editable="true">
                     <VBox width="100%">
                         <VBox>
-                            <!-- <fb:FilterBar id="filterbar" reset="onReset" useToolbar="true" showGoOnFB="false" showFilterConfiguration="false" showRestoreOnFB="true">
+                            <fb:FilterBar id="filterbar" reset="onReset" useToolbar="true" showGoOnFB="false" showFilterConfiguration="false" showRestoreOnFB="true">
                                 <fb:filterItems>
                                     <fb:FilterItem name="A" label="County">
                                         <fb:control>
                                             <Select id="slCounty" change="onSelectChange" forceSelection="false" items="{
                                                     path: 'countyService>/ZINS_C_COUNTYTP'
                                                  }">
-                                                <core:Item key="{countyService>county_id}" text="{path: 'categoryService>county_name'}"/>
+                                                <core:Item key="{countyService>county_id}" text="{countyService>county_name}"/>
                                             </Select>
                                         </fb:control>
                                     </fb:FilterItem>
                                 </fb:filterItems>
-                            </fb:FilterBar> -->
-                            <Table headerText="Damage Files" growing="true" id="damageFilesTable" items="{path: 'damageFileService>/ZINS_C_DMGFILETP' , sorter: { path: 'incident_date', descending: true }, , filters: [{ path: 'isarchived', operator: 'EQ',  value1: 'false' }]}">
+                            </fb:FilterBar>
+                            <Table headerText="Damage Files" growing="true" id="damageFilesTable" items="{path: 'damageFileService>/ZINS_C_DMGFILETP' , sorter: { path: 'incident_date', descending: true }, filters: [{ path: 'isarchived', operator: 'NE',  value1: 'X' }]}">
                                 <headerToolbar>
                                     <Toolbar>
                                         <Title text="{i18n>listDamageFiles}"/>
