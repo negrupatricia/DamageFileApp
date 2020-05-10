@@ -1,0 +1,82 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" 
+    xmlns="sap.m" 
+    xmlns:form="sap.ui.layout.form" 
+    xmlns:u="sap.ui.unified" 
+    xmlns:t="sap.ui.table" 
+    xmlns:fb="sap.ui.comp.filterbar" 
+    xmlns:f="sap.f">
+    <App>
+        <Page title="{i18n>viewDamageFilesTitle}" showHeader="true">
+            <content>
+                <form:SimpleForm editable="true">
+                    <VBox width="100%">
+                        <VBox>
+                            <!-- <fb:FilterBar id="filterbar" reset="onReset" useToolbar="true" showGoOnFB="false" showFilterConfiguration="false" showRestoreOnFB="true">
+                                <fb:filterItems>
+                                    <fb:FilterItem name="A" label="County">
+                                        <fb:control>
+                                            <Select id="slCounty" change="onSelectChange" forceSelection="false" items="{
+                                                    path: 'countyService>/ZINS_C_COUNTYTP'
+                                                 }">
+                                                <core:Item key="{countyService>county_id}" text="{path: 'categoryService>county_name'}"/>
+                                            </Select>
+                                        </fb:control>
+                                    </fb:FilterItem>
+                                </fb:filterItems>
+                            </fb:FilterBar> -->
+                            <Table headerText="Damage Files" growing="true" id="damageFilesTable" items="{path: 'damageFileService>/ZINS_C_DMGFILETP' , sorter: { path: 'incident_date', descending: true }, , filters: [{ path: 'isarchived', operator: 'EQ',  value1: 'false' }]}">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <Title text="{i18n>listDamageFiles}"/>
+                                        <ToolbarSpacer/>
+                                        <SearchField width="50%" search="onFilterSearch" selectOnFocus="false"/>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column visible="hidden">
+                                        <header></header>
+                                    </Column>
+                                    <Column visible="hidden">
+                                    </Column>
+                                    <Column visible="hidden">
+                                    </Column>
+                                    <Column width="15rem">
+                                        <Label text="{i18n>description}"/>
+                                    </Column>
+                                    <Column width="5rem">
+                                        <Label text="{i18n>date}"/>
+                                    </Column>
+                                    <Column width="5rem">
+                                        <Label text="{i18n>totalDamage}"/>
+                                    </Column>
+                                    <Column width="10rem">
+                                        <Label text="{i18n>compensation}"/>
+                                    </Column>
+                                    <Column width="5rem">
+                                    </Column>
+                                    <Column width="5rem">
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{damageFileService>file_id}" visible="hidden"/>
+                                            <Text text="{damageFileService>cust_id}" visible="hidden"/>
+                                            <Text text="{damageFileService>ins_car_id}" visible="hidden"/>
+                                            <Text text="{damageFileService>description}"/>
+                                            <Text text="{path:'damageFileService>incident_date', type: 'sap.ui.model.type.Date'}"/>
+                                            <Text text="{damageFileService>total_damage}"/>
+                                            <Text text="{damageFileService>compensation} RON"/>
+                                            <Button id="seeDetails" visible="{oButtonsModel>/enabledSeeDetails}" text="{i18n>SeeDetails}" press="seeQuestionDetails" type="Transparent"/>
+                                            <Button icon="sap-icon://edit" id="editDetails" ariaLabelledBy="editButtonLabel" visible="{oButtonsModel>/enabledEditDetails}" press="editQuestionDetails" type="Transparent"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </VBox>
+                    </VBox>
+                </form:SimpleForm>
+            </content>
+        </Page>
+    </App>
+</core:FragmentDefinition>

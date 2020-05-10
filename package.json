@@ -1,18 +1,43 @@
 {
-  "name": "DamageFiles",
+  "name": "damagefiles",
   "version": "0.0.1",
   "description": "",
   "devDependencies": {
-    "@ui5/cli": "1.13.0",
-    "@sap/ui5-builder-webide-extension": "1.0.x"
+    "@ui5/cli": "1.13.0"
   },
   "scripts": {
     "build": "ui5 build --clean-dest --include-task=generateManifestBundle generateCachebusterInfo"
   },
   "ui5": {
-    "dependencies": [
-      "@sap/ui5-builder-webide-extension"
-    ]
+    "dependencies": []
   },
-  "private": "true"
+  "private": "true",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "eslint": "^6.8.0",
+    "foodoc": "0.0.9",
+    "grunt": "^1.1.0",
+    "grunt-connect-proxy2": "^2.0.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-connect": "^2.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-eslint": "^22.0.0",
+    "grunt-jsdoc": "^2.4.1",
+    "grunt-nwabap-ui5uploader": "^1.0.6",
+    "grunt-openui5": "^0.16.0",
+    "grunt-port-pick": "^1.5.3",
+    "grunt-xml-validator": "^1.1.3",
+    "jit-grunt": "^0.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/negrupatricia/DamageFileApp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/negrupatricia/DamageFileApp/issues"
+  },
+  "homepage": "https://github.com/negrupatricia/DamageFileApp#readme"
 }

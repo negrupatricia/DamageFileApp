@@ -1,0 +1,50 @@
+<xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" 
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" 
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" 
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://msas6245i.msg.de:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" 
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZINS_C_DMGFILETP_SRV" xml:lang="en" sap:schema-version="1" 
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ZINS_C_DMGFILETPType" sap:label="Consumption CDS for Damage File BO" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="file_id"/>
+                </Key>
+                <Property Name="file_id" Type="Edm.Int16" Nullable="false" sap:label="File id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="isarchived" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Archived"/>
+                <Property Name="county" Type="Edm.Int16" Nullable="false" sap:label="County id"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="cust_id" Type="Edm.Int16" Nullable="false" sap:label="Customer id"/>
+                <Property Name="ins_car_id" Type="Edm.Int16" Nullable="false" sap:label="Insured car id"/>
+                <Property Name="description" Type="Edm.String" Nullable="false" MaxLength="255" sap:display-format="UpperCase" sap:label="Description"/>
+                <Property Name="incident_date" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Date"/>
+                <Property Name="time" Type="Edm.Time" Precision="0" sap:label="Incident time"/>
+                <Property Name="total_damage" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Total damage"/>
+                <Property Name="currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="compensation" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="currency" sap:label="Compensation"/>
+            </EntityType>
+            <EntityContainer Name="ZINS_C_DMGFILETP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZINS_C_DMGFILETP" EntityType="ZINS_C_DMGFILETP_SRV.ZINS_C_DMGFILETPType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotations Target="ZINS_C_DMGFILETP_SRV.ZINS_C_DMGFILETPType" 
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>file_id</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_DMGFILETP_SRV/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_DMGFILETP_SRV/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

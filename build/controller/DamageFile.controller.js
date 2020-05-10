@@ -42,40 +42,14 @@ sap.ui.define([
 
 					}, error: function () { }
 				});
+
+
 			}
 			else {
 				var oTable = oView.byId("damageFilesTable");
 				var oBinding = oTable.getBinding("items");
 				oBinding.filter(aFilter);
 			}
-		},
-
-		onSelectChange: function () {
-
-			this.oSelectedCounty = this.getSelect("slCounty");
-
-			var aCurrentFilterValues = [];
-			if (this.oSelectedCounty.getSelectedItem() !== null) {
-				aCurrentFilterValues.push(new Filter("county_id", FilterOperator.EQ, this.oSelectedCounty.getSelectedItem().mProperties.key));
-			}
-			this.filterTable(aCurrentFilterValues);
-		},
-		filterTable: function (aCurrentFilterValues) {
-			this.getTableItems().filter(aCurrentFilterValues);
-		},
-		getTableItems: function () {
-			return this.getTable().getBinding("items");
-		},
-		getTable: function () {
-			return this.getView().byId("damageFilesTable");
-		},
-		getSelect: function (sId) {
-			return this.getView().byId(sId);
-		},
-		onReset: function () {
-			this.getSelect("slCounty").setSelectedItem(null);
-			var aCurrentFilterValues = [];
-			this.filterTable(aCurrentFilterValues);
-		},
+		}
 	});
 });

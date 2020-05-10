@@ -1,0 +1,11 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" 
+    xmlns="sap.m" 
+    xmlns:form="sap.ui.layout.form" 
+    xmlns:u="sap.ui.unified">
+    <App>
+        <Page title="{i18n>createDamageFilesTitle}" showHeader="true">
+            <content>
+            </content>
+        </Page>
+    </App>
+</core:FragmentDefinition>
