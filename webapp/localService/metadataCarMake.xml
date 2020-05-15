@@ -1,0 +1,70 @@
+<edmx:Edmx Version="1.0" 
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" 
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" 
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://msas6245i.msg.de:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" 
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZINS_C_CARMAKETP_SRV" xml:lang="en" sap:schema-version="1" 
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ZINS_C_CARMAKETPType" sap:label="Consumption CDS for Car make node" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="make_id"/>
+                </Key>
+                <Property Name="make_id" Type="Edm.Int16" Nullable="false" sap:label="Make id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="car_name" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Car make"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_CarModel" Relationship="ZINS_C_CARMAKETP_SRV.assoc_5C3432ED2B94BB7E2686C1F68D8B01D6" FromRole="FromRole_assoc_5C3432ED2B94BB7E2686C1F68D8B01D6" ToRole="ToRole_assoc_5C3432ED2B94BB7E2686C1F68D8B01D6"/>
+            </EntityType>
+            <EntityType Name="ZINS_C_CARMODELTPType" sap:label="Consumption CDS for Car model node" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="model_id"/>
+                </Key>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="model_id" Type="Edm.Int16" Nullable="false" sap:label="Model id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="make_id" Type="Edm.Int16" sap:label="Make id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="model_name" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="Model name"/>
+            </EntityType>
+            <Association Name="assoc_5C3432ED2B94BB7E2686C1F68D8B01D6" sap:content-version="1">
+                <End Type="ZINS_C_CARMAKETP_SRV.ZINS_C_CARMAKETPType" Multiplicity="1" Role="FromRole_assoc_5C3432ED2B94BB7E2686C1F68D8B01D6"/>
+                <End Type="ZINS_C_CARMAKETP_SRV.ZINS_C_CARMODELTPType" Multiplicity="*" Role="ToRole_assoc_5C3432ED2B94BB7E2686C1F68D8B01D6"/>
+            </Association>
+            <EntityContainer Name="ZINS_C_CARMAKETP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZINS_C_CARMAKETP" EntityType="ZINS_C_CARMAKETP_SRV.ZINS_C_CARMAKETPType" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="ZINS_C_CARMODELTP" EntityType="ZINS_C_CARMAKETP_SRV.ZINS_C_CARMODELTPType" sap:content-version="1"/>
+                <AssociationSet Name="assoc_5C3432ED2B94BB7E2686C1F68D8B01D6" Association="ZINS_C_CARMAKETP_SRV.assoc_5C3432ED2B94BB7E2686C1F68D8B01D6" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_CARMAKETP" Role="FromRole_assoc_5C3432ED2B94BB7E2686C1F68D8B01D6"/>
+                    <End EntitySet="ZINS_C_CARMODELTP" Role="ToRole_assoc_5C3432ED2B94BB7E2686C1F68D8B01D6"/>
+                </AssociationSet>
+            </EntityContainer>
+            <Annotations Target="ZINS_C_CARMAKETP_SRV.ZINS_C_CARMAKETPType" 
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>make_id</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="ZINS_C_CARMAKETP_SRV.ZINS_C_CARMODELTPType" 
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>model_id</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_CARMAKETP_SRV/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_CARMAKETP_SRV/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

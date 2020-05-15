@@ -15,7 +15,7 @@
                 </Key>
                 <Property Name="county_id" Type="Edm.Int16" Nullable="false" sap:label="County id" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="county_name" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="County name"/>
-                <Property Name="accident_rate" Type="Edm.Double" sap:label="Accident rate"/>
+                <Property Name="accident_rate" Type="Edm.Decimal" Precision="3" Scale="2" sap:label="Accident rate"/>
                 <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>

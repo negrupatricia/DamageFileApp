@@ -1,0 +1,73 @@
+<edmx:Edmx Version="1.0" 
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" 
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" 
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://msas6245i.msg.de:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" 
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZINS_C_CUSTOMERTP_SRV" xml:lang="en" sap:schema-version="1" 
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ZINS_C_CUSTOMERTPType" sap:label="Consumption CDS for Customer node" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="cust_id"/>
+                </Key>
+                <Property Name="cust_id" Type="Edm.Int16" Nullable="false" sap:label="Customer id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="county" Type="Edm.Int16" Nullable="false" sap:label="County id"/>
+                <Property Name="county_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="County name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="iscity" Type="Edm.String" Nullable="false" MaxLength="1" sap:display-format="UpperCase" sap:label="City"/>
+                <Property Name="rating" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Rating" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="first_name" Type="Edm.String" Nullable="false" MaxLength="20" sap:display-format="UpperCase" sap:label="First name"/>
+                <Property Name="last_name" Type="Edm.String" Nullable="false" MaxLength="30" sap:display-format="UpperCase" sap:label="Last name"/>
+                <Property Name="licence_number" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="License number"/>
+                <Property Name="cnp" Type="Edm.String" Nullable="false" MaxLength="15" sap:display-format="UpperCase" sap:label="CNP"/>
+                <Property Name="age" Type="Edm.String" MaxLength="2" sap:display-format="NonNegative" sap:label="Age" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="phonenumber" Type="Edm.String" Nullable="false" MaxLength="15" sap:display-format="UpperCase" sap:label="Phone number"/>
+                <Property Name="email" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Email"/>
+                <Property Name="adress" Type="Edm.String" Nullable="false" MaxLength="30" sap:display-format="UpperCase" sap:label="Adress"/>
+                <NavigationProperty Name="to_County" Relationship="ZINS_C_CUSTOMERTP_SRV.assoc_A147124A61D15A3D251A21A4C518F0F0" FromRole="FromRole_assoc_A147124A61D15A3D251A21A4C518F0F0" ToRole="ToRole_assoc_A147124A61D15A3D251A21A4C518F0F0"/>
+            </EntityType>
+            <EntityType Name="ZINS_I_COUNTYType" sap:label="County base CDS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="county_id"/>
+                </Key>
+                <Property Name="county_id" Type="Edm.Int16" Nullable="false" sap:label="County id"/>
+                <Property Name="county_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="County name"/>
+                <Property Name="accident_rate" Type="Edm.Decimal" Precision="3" Scale="2" sap:label="Accident rate"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+            </EntityType>
+            <Association Name="assoc_A147124A61D15A3D251A21A4C518F0F0" sap:content-version="1">
+                <End Type="ZINS_C_CUSTOMERTP_SRV.ZINS_C_CUSTOMERTPType" Multiplicity="1" Role="FromRole_assoc_A147124A61D15A3D251A21A4C518F0F0"/>
+                <End Type="ZINS_C_CUSTOMERTP_SRV.ZINS_I_COUNTYType" Multiplicity="0..1" Role="ToRole_assoc_A147124A61D15A3D251A21A4C518F0F0"/>
+            </Association>
+            <EntityContainer Name="ZINS_C_CUSTOMERTP_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZINS_C_CUSTOMERTP" EntityType="ZINS_C_CUSTOMERTP_SRV.ZINS_C_CUSTOMERTPType" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="ZINS_I_COUNTY" EntityType="ZINS_C_CUSTOMERTP_SRV.ZINS_I_COUNTYType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <AssociationSet Name="assoc_A147124A61D15A3D251A21A4C518F0F0" Association="ZINS_C_CUSTOMERTP_SRV.assoc_A147124A61D15A3D251A21A4C518F0F0" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_CUSTOMERTP" Role="FromRole_assoc_A147124A61D15A3D251A21A4C518F0F0"/>
+                    <End EntitySet="ZINS_I_COUNTY" Role="ToRole_assoc_A147124A61D15A3D251A21A4C518F0F0"/>
+                </AssociationSet>
+            </EntityContainer>
+            <Annotations Target="ZINS_C_CUSTOMERTP_SRV.ZINS_C_CUSTOMERTPType" 
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>cust_id</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_CUSTOMERTP_SRV/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_CUSTOMERTP_SRV/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

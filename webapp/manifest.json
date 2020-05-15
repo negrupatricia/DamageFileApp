@@ -29,6 +29,30 @@
 					"odataVersion": "2.0",
 					"localUri": "./localService/metadataCounty.xml"
 				}
+			},
+			"customerService": {
+				"type": "OData",
+				"uri": "/sap/opu/odata/SAP/ZINS_C_CUSTOMERTP_SRV",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "./localService/metadataCustomer.xml"
+				}
+			},
+			"carMakeService": {
+				"type": "OData",
+				"uri": "/sap/opu/odata/SAP/ZINS_C_CARMAKETP_SRV",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "./localService/metadataCarMake.xml"
+				}
+			},
+			"carPolicyService": {
+				"type": "OData",
+				"uri": "/sap/opu/odata/SAP/ZINS_C_CARPOLICYTP_SRV",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "./localService/metadataCarPolicy.xml"
+				}
 			}
 		}
 	},
@@ -80,6 +104,15 @@
 				"dataSource": "damageFileService"
 			},
 			"countyService": {
+				"dataSource": "countyService"
+			},
+			"customerService": {
+				"dataSource": "customerService"
+			},
+			"carMakeService": {
+				"dataSource": "carMakeService"
+			},
+			"carPolicyService": {
 				"dataSource": "countyService"
 			}
 		},

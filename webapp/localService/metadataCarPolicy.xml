@@ -1,0 +1,169 @@
+<edmx:Edmx Version="1.0" 
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" 
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" 
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://msas6245i.msg.de:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" 
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZINS_C_CARPOLICYTP_SRV_01" xml:lang="en" sap:schema-version="1" 
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ZINS_C_CARPOLICYTPType" sap:label="Consumption CDS for Car Policy node" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="policy_id"/>
+                </Key>
+                <Property Name="policy_id" Type="Edm.Int16" Nullable="false" sap:label="Policy id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="isarchived" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Archived"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="cust_id" Type="Edm.Int16" Nullable="false" sap:label="Customer id"/>
+                <Property Name="last_name" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Last name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="first_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="First name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="create_date" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Create Date"/>
+                <Property Name="end_date" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="End Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="period" Type="Edm.Byte" Nullable="false" sap:label="Period"/>
+                <Property Name="currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="amount" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unit="currency" sap:label="Amout"/>
+                <NavigationProperty Name="to_Customer" Relationship="ZINS_C_CARPOLICYTP_SRV_01.assoc_0CA89F64648F83B1F9640E99B244111F" FromRole="FromRole_assoc_0CA89F64648F83B1F9640E99B244111F" ToRole="ToRole_assoc_0CA89F64648F83B1F9640E99B244111F"/>
+                <NavigationProperty Name="to_InsuredCar" Relationship="ZINS_C_CARPOLICYTP_SRV_01.assoc_84446E5C5434091AED2B951ED69FE162" FromRole="FromRole_assoc_84446E5C5434091AED2B951ED69FE162" ToRole="ToRole_assoc_84446E5C5434091AED2B951ED69FE162"/>
+            </EntityType>
+            <EntityType Name="ZINS_C_INSUREDCARTPType" sap:label="Consumption CDS for Insured Car node" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ins_car_id"/>
+                </Key>
+                <Property Name="ins_car_id" Type="Edm.Int16" Nullable="false" sap:label="Insured car id" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="policy_id" Type="Edm.Int16" sap:label="Policy id"/>
+                <Property Name="make_id" Type="Edm.Int16" Nullable="false" sap:label="Make id"/>
+                <Property Name="car_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Car make" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="model_id" Type="Edm.Int16" Nullable="false" sap:label="Model id"/>
+                <Property Name="model_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Model name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="car_production_date" Type="Edm.DateTime" Nullable="false" Precision="0" sap:display-format="Date" sap:label="Production Date"/>
+                <Property Name="engine_capacity" Type="Edm.Int16" Nullable="false" sap:label="Engine capacity"/>
+                <Property Name="number_plate" Type="Edm.String" Nullable="false" MaxLength="15" sap:display-format="UpperCase" sap:label="Number plate"/>
+                <Property Name="vin_number" Type="Edm.String" Nullable="false" MaxLength="30" sap:display-format="UpperCase" sap:label="VIN number"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_CarMake" Relationship="ZINS_C_CARPOLICYTP_SRV_01.assoc_56DA8D8D2A37F2DB1E2C05C27E898737" FromRole="FromRole_assoc_56DA8D8D2A37F2DB1E2C05C27E898737" ToRole="ToRole_assoc_56DA8D8D2A37F2DB1E2C05C27E898737"/>
+                <NavigationProperty Name="to_CarModel" Relationship="ZINS_C_CARPOLICYTP_SRV_01.assoc_B0981800A1762B8D61A585A87DDEA8DD" FromRole="FromRole_assoc_B0981800A1762B8D61A585A87DDEA8DD" ToRole="ToRole_assoc_B0981800A1762B8D61A585A87DDEA8DD"/>
+                <NavigationProperty Name="to_CarPolicy" Relationship="ZINS_C_CARPOLICYTP_SRV_01.assoc_1B8BBEE7D88B06B6D9B355F238527C58" FromRole="FromRole_assoc_1B8BBEE7D88B06B6D9B355F238527C58" ToRole="ToRole_assoc_1B8BBEE7D88B06B6D9B355F238527C58"/>
+            </EntityType>
+            <EntityType Name="ZINS_I_CAR_MAKEType" sap:label="Car make base CDS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="make_id"/>
+                </Key>
+                <Property Name="make_id" Type="Edm.Int16" Nullable="false" sap:label="Make id"/>
+                <Property Name="car_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Car make"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+            </EntityType>
+            <EntityType Name="ZINS_I_CAR_MODELType" sap:label="Car model base CDS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="model_id"/>
+                </Key>
+                <Property Name="model_id" Type="Edm.Int16" Nullable="false" sap:label="Model id"/>
+                <Property Name="make_id" Type="Edm.Int16" sap:label="Make id"/>
+                <Property Name="model_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="Model name"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+            </EntityType>
+            <EntityType Name="ZINS_I_CUSTOMERType" sap:label="Customer base CDS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="cust_id"/>
+                </Key>
+                <Property Name="cust_id" Type="Edm.Int16" Nullable="false" sap:label="Customer id"/>
+                <Property Name="first_name" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="First name"/>
+                <Property Name="last_name" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Last name"/>
+                <Property Name="licence_number" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="License number"/>
+                <Property Name="cnp" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="CNP"/>
+                <Property Name="phonenumber" Type="Edm.String" MaxLength="15" sap:display-format="UpperCase" sap:label="Phone number"/>
+                <Property Name="email" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Email"/>
+                <Property Name="adress" Type="Edm.String" MaxLength="30" sap:display-format="UpperCase" sap:label="Adress"/>
+                <Property Name="county" Type="Edm.Int16" sap:label="County id"/>
+                <Property Name="iscity" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="City"/>
+                <Property Name="birth_date" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Date"/>
+                <Property Name="age" Type="Edm.String" MaxLength="2" sap:display-format="NonNegative" sap:label="Age"/>
+                <Property Name="rating" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Rating"/>
+                <Property Name="crea_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="crea_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+                <Property Name="lchg_uname" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="User Name"/>
+                <Property Name="lchg_date_time" Type="Edm.DateTimeOffset" Precision="7" sap:label="Time Stamp"/>
+            </EntityType>
+            <Association Name="assoc_56DA8D8D2A37F2DB1E2C05C27E898737" sap:content-version="1">
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_INSUREDCARTPType" Multiplicity="1" Role="FromRole_assoc_56DA8D8D2A37F2DB1E2C05C27E898737"/>
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_I_CAR_MAKEType" Multiplicity="0..1" Role="ToRole_assoc_56DA8D8D2A37F2DB1E2C05C27E898737"/>
+            </Association>
+            <Association Name="assoc_B0981800A1762B8D61A585A87DDEA8DD" sap:content-version="1">
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_INSUREDCARTPType" Multiplicity="1" Role="FromRole_assoc_B0981800A1762B8D61A585A87DDEA8DD"/>
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_I_CAR_MODELType" Multiplicity="0..1" Role="ToRole_assoc_B0981800A1762B8D61A585A87DDEA8DD"/>
+            </Association>
+            <Association Name="assoc_1B8BBEE7D88B06B6D9B355F238527C58" sap:content-version="1">
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_INSUREDCARTPType" Multiplicity="1" Role="FromRole_assoc_1B8BBEE7D88B06B6D9B355F238527C58"/>
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_CARPOLICYTPType" Multiplicity="1" Role="ToRole_assoc_1B8BBEE7D88B06B6D9B355F238527C58"/>
+            </Association>
+            <Association Name="assoc_84446E5C5434091AED2B951ED69FE162" sap:content-version="1">
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_CARPOLICYTPType" Multiplicity="1" Role="FromRole_assoc_84446E5C5434091AED2B951ED69FE162"/>
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_INSUREDCARTPType" Multiplicity="*" Role="ToRole_assoc_84446E5C5434091AED2B951ED69FE162"/>
+            </Association>
+            <Association Name="assoc_0CA89F64648F83B1F9640E99B244111F" sap:content-version="1">
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_CARPOLICYTPType" Multiplicity="1" Role="FromRole_assoc_0CA89F64648F83B1F9640E99B244111F"/>
+                <End Type="ZINS_C_CARPOLICYTP_SRV_01.ZINS_I_CUSTOMERType" Multiplicity="0..1" Role="ToRole_assoc_0CA89F64648F83B1F9640E99B244111F"/>
+            </Association>
+            <EntityContainer Name="ZINS_C_CARPOLICYTP_SRV_01_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZINS_C_CARPOLICYTP" EntityType="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_CARPOLICYTPType" sap:searchable="true" sap:content-version="1"/>
+                <EntitySet Name="ZINS_C_INSUREDCARTP" EntityType="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_INSUREDCARTPType" sap:content-version="1"/>
+                <EntitySet Name="ZINS_I_CAR_MAKE" EntityType="ZINS_C_CARPOLICYTP_SRV_01.ZINS_I_CAR_MAKEType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="ZINS_I_CAR_MODEL" EntityType="ZINS_C_CARPOLICYTP_SRV_01.ZINS_I_CAR_MODELType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="ZINS_I_CUSTOMER" EntityType="ZINS_C_CARPOLICYTP_SRV_01.ZINS_I_CUSTOMERType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <AssociationSet Name="assoc_B0981800A1762B8D61A585A87DDEA8DD" Association="ZINS_C_CARPOLICYTP_SRV_01.assoc_B0981800A1762B8D61A585A87DDEA8DD" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_INSUREDCARTP" Role="FromRole_assoc_B0981800A1762B8D61A585A87DDEA8DD"/>
+                    <End EntitySet="ZINS_I_CAR_MODEL" Role="ToRole_assoc_B0981800A1762B8D61A585A87DDEA8DD"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_84446E5C5434091AED2B951ED69FE162" Association="ZINS_C_CARPOLICYTP_SRV_01.assoc_84446E5C5434091AED2B951ED69FE162" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_CARPOLICYTP" Role="FromRole_assoc_84446E5C5434091AED2B951ED69FE162"/>
+                    <End EntitySet="ZINS_C_INSUREDCARTP" Role="ToRole_assoc_84446E5C5434091AED2B951ED69FE162"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_56DA8D8D2A37F2DB1E2C05C27E898737" Association="ZINS_C_CARPOLICYTP_SRV_01.assoc_56DA8D8D2A37F2DB1E2C05C27E898737" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_INSUREDCARTP" Role="FromRole_assoc_56DA8D8D2A37F2DB1E2C05C27E898737"/>
+                    <End EntitySet="ZINS_I_CAR_MAKE" Role="ToRole_assoc_56DA8D8D2A37F2DB1E2C05C27E898737"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_0CA89F64648F83B1F9640E99B244111F" Association="ZINS_C_CARPOLICYTP_SRV_01.assoc_0CA89F64648F83B1F9640E99B244111F" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_CARPOLICYTP" Role="FromRole_assoc_0CA89F64648F83B1F9640E99B244111F"/>
+                    <End EntitySet="ZINS_I_CUSTOMER" Role="ToRole_assoc_0CA89F64648F83B1F9640E99B244111F"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_1B8BBEE7D88B06B6D9B355F238527C58" Association="ZINS_C_CARPOLICYTP_SRV_01.assoc_1B8BBEE7D88B06B6D9B355F238527C58" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZINS_C_INSUREDCARTP" Role="FromRole_assoc_1B8BBEE7D88B06B6D9B355F238527C58"/>
+                    <End EntitySet="ZINS_C_CARPOLICYTP" Role="ToRole_assoc_1B8BBEE7D88B06B6D9B355F238527C58"/>
+                </AssociationSet>
+            </EntityContainer>
+            <Annotations Target="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_CARPOLICYTPType" 
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>policy_id</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="ZINS_C_CARPOLICYTP_SRV_01.ZINS_C_INSUREDCARTPType" 
+                xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>ins_car_id</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_CARPOLICYTP_SRV_01/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://msas6245i.msg.de:8000/sap/opu/odata/SAP/ZINS_C_CARPOLICYTP_SRV_01/$metadata" 
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
