@@ -1,0 +1,107 @@
+<core:FragmentDefinition xmlns="sap.m" 
+    xmlns:core="sap.ui.core" 
+    xmlns:f="sap.f" 
+    xmlns:fb="sap.ui.comp.filterbar" 
+    xmlns:footerbar="sap.ushell.ui.footerbar" 
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns:form="sap.ui.layout.form" 
+    xmlns:u="sap.ui.unified">
+    <App>
+        <Page title="{i18n>viewDamageHistoryTitle}" showHeader="true">
+            <content>
+            <form:SimpleForm>
+			<VBox>
+				<VBox>
+					<Bar design="Header">
+						<contentLeft>
+							<Label text="{i18n>customerLabel}"/>
+							<MultiInput busy="{testsDelay>/busy}" busyIndicatorDelay="{testsDelay>/delay}" id="testInput" width="400px"
+									valueHelpRequest="_onCustomerDataValueHelpRequest"/>
+						</contentLeft>
+					</Bar>
+					<VBox id="dmgHistoryPanel" visible="hidden">
+							<Panel busy="{gradedDelay>/busy}">
+							    <HBox alignContent="SpaceBetween" class=" sapUiTinyMarginTop sapUiMediumMarginBegin sapUiMediumMarginBottom">
+								    <VBox alignContent="SpaceBetween" class=" sapUiMediumMarginBegin sapUiLargeMarginEnd">
+										<Label text="{i18n>CustomerRating}" ></Label>
+										<Label id="CustomerRating" design = "Bold" ></Label> 
+								 	</VBox>
+								   	<VBox alignContent="SpaceBetween" class="sapUiLargeMarginBegin sapUiLargeMarginEnd">
+										<Label text="{i18n>CustomerFirstName}" ></Label>
+										<Label id="CustomerFirstName" design = "Bold"></Label>
+								   	</VBox>	 
+								    <VBox alignContent="SpaceBetween" class="sapUiLargeMarginBegin sapUiLargeMarginEnd"> 
+										<Label text="{i18n>CustomerLastName}" ></Label>
+										<Label id="CustomerLastName" design = "Bold"></Label>
+									</VBox>
+									<VBox alignContent="SpaceBetween" class="sapUiLargeMarginBegin sapUiLargeMarginEnd"> 
+										<Label text="{i18n>CustomerCNP}" ></Label>
+										<Label id="CustomerCNP" design = "Bold" ></Label>
+									</VBox>
+									<VBox alignContent="SpaceBetween" class="sapUiLargeMarginBegin sapUiLargeMarginEnd"> 
+										<Label text="{i18n>DamageFiles}" ></Label>
+										<Label id="DamageFiles" design = "Bold" ></Label>
+									</VBox>
+								</HBox>
+							</Panel>
+				 <Table headerText="Damage Files" growing="true" id="damageHistoryTable" items="{path: 'DamageHist>/aEntries' }">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <Title text="{i18n>listDamageFiles}"/>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column visible="hidden">
+                                        <header></header>
+                                    </Column>
+                                    <Column visible="hidden">
+                                    </Column>
+                                    <Column visible="hidden">
+                                    </Column>
+                                    <Column width="15rem">
+                                        <Label text="{i18n>description}"/>
+                                    </Column>
+                                    <Column width="5rem">
+                                        <Label text="{i18n>county}"/>
+                                    </Column>
+                                    <Column width="10rem">
+                                        <Label text="{i18n>date}"/>
+                                    </Column>
+                                    <Column width="10rem">
+                                        <Label text="{i18n>totalDamage}"/>
+                                    </Column>
+                                    <Column width="10rem">
+                                        <Label text="{i18n>compensation}"/>
+                                    </Column>
+                                    <Column width="10rem">
+                                        <Label text="{i18n>status}"/>
+                                    </Column>
+                                    <Column width="5rem">
+                                    </Column>
+                                    <Column width="5rem">
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{DamageHist>ile_id}" visible="hidden"/>
+                                            <Text text="{DamageHist>cust_id}" visible="hidden"/>
+                                            <Text text="{DamageHist>ins_car_id}" visible="hidden"/>
+                                            <Text text="{DamageHist>description}"/>
+                                            <Text text="{DamageHist>county_name}"/>
+                                            <Text text="{path:'DamageHist>incident_date', type: 'sap.ui.model.type.Date'}"/>
+                                            <Text text="{DamageHist>total_damage}"/>
+                                            <Text text="{DamageHist>compensation} RON"/>
+                                            <Text text="{path:'DamageHist>isarchived'}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+						</VBox>
+				 </VBox>
+				 </VBox>
+			</form:SimpleForm>
+            </content>
+        </Page>
+    </App>
+</core:FragmentDefinition>

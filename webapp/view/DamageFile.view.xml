@@ -11,7 +11,9 @@
 					<tnt:SideNavigation id="SideNavigation" expanded="true" selectedKey="viewDamageFileKey" itemSelect="_onItemSelect">
 						<tnt:NavigationList id="navList" itemSelect="_enableButtons">
 							<tnt:NavigationListItem id="viewDamageFileNavigationID" text="{i18n>viewDamageFileLabel}" icon="sap-icon://detail-view" key="viewDamageFileKey"></tnt:NavigationListItem>
-							<tnt:NavigationListItem id="createDamageFileID" text="{i18n>createDamageFileLabel}" icon="sap-icon://write-new" key="createDamageFileKey"></tnt:NavigationListItem>
+							<tnt:NavigationListItem id="createDamageFileID" text="{i18n>createDamageFileLabel}" icon="sap-icon://collision" key="createDamageFileKey"></tnt:NavigationListItem>
+							<tnt:NavigationListItem id="viewDamageHistoryID" text="{i18n>viewDamageHistoryFileLabel}" icon="sap-icon://activity-individual" key="viewDamageHistoryFileKey"></tnt:NavigationListItem>
+							<tnt:NavigationListItem id="dataAnalysisID" text="{i18n>dataAnalysisLabel}" icon="sap-icon://filter-analytics" key="dataAnalysisFileKey"></tnt:NavigationListItem>
 						</tnt:NavigationList>
 					</tnt:SideNavigation>
 				</tnt:sideContent>
@@ -23,6 +25,12 @@
 							</ScrollContainer>
 							<ScrollContainer id="createDamageFileKey" height="90%">
 								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.CreateDamageFile" type="XML"/>
+							</ScrollContainer>
+							<ScrollContainer id="viewDamageHistoryFileKey" height="90%">
+								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewDamageHistory" type="XML"/>
+							</ScrollContainer>
+							<ScrollContainer id="dataAnalysisFileKey" height="90%">
+								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewChartDataAnalysis" type="XML"/>
 							</ScrollContainer>
 						</pages>
 					</NavContainer>

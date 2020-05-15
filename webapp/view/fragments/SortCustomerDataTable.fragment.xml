@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog id="sortCustomerData" title="{i18n>sortCustomerDataDialogTitle}" icon="sap-icon://sort" type="Message" busy="{question>/busy}" 
+			busyIndicatorDelay="{question>/delay}">
+		<VBox alignContent="SpaceBetween">
+						<List noDataText="Drop list items here" id="sortList" mode="SingleSelectLeft">
+							<StandardListItem id="sortby1"  key="CustomerName" title="Customer Name"/>
+							<StandardListItem id="sortby2"  key="County" title="County"/>
+							<StandardListItem id="sortby3"  key="Rating" title="Rating"/>
+						</List>
+		</VBox>
+		<buttons>
+			<Button icon="sap-icon://drill-up" text="{i18n>ascendingSortButton}" press="_onAscendingSortCustomerData"/>
+			<Button icon="sap-icon://drill-down" text="{i18n>descendingSortButton}" press="_onDescendingSortCustomerData"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

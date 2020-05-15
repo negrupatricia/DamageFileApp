@@ -1,0 +1,82 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog id="customerData" title="{i18n>SearchDamageHistoryTitle}" icon="sap-icon://hint" type="Message" busy="{question>/busy}" 
+			busyIndicatorDelay="{question>/delay}">
+		<VBox alignContent="SpaceBetween">
+			<Table id="CustomerTable" items="{path: 'customerService>/ZINS_C_CUSTOMERTP' }" mode="SingleSelectLeft" >
+								<headerToolbar>
+									<Toolbar>
+										<SearchField width="50%" search="_onSearchCustomers" selectOnFocus="false"/>
+										<ToolbarSpacer/>
+										<Button id="getCustomerData" icon="sap-icon://sort" press="_onOpenCustomerDataSortDialog" />
+									</Toolbar>
+								</headerToolbar>
+							<columns>
+							    <Column visible="hidden">
+									<header>
+										<Text text="{i18n>CustomerIDHeader}"></Text>
+									</header>
+								</Column>
+								<Column>
+									<header>
+										<Text text="{i18n>CustomerFirstNameHeader}"></Text>
+									</header>
+								</Column>
+								<Column>
+									<header>
+										<Text text="{i18n>CustomerLastNameHeader}"></Text>
+									</header>
+								</Column>
+								<Column visible="hidden">
+									<header>
+										<Text text="{i18n>CustomerCNPHeader}"></Text>
+									</header>
+								</Column>
+								<Column>
+									<header>
+										<Text text="{i18n>CustomerAdressHeader}"></Text>
+									</header>
+								</Column>
+								<Column>
+									<header>
+										<Text text="{i18n>CustomerCountyNameHeader}"></Text>
+									</header>
+								</Column>
+								<Column >
+									<header>
+										<Text text="{i18n>CustomerTelephoneHeader}"></Text>
+									</header>
+								</Column>
+								<Column >
+									<header>
+										<Text text="{i18n>CustomerEmailHeader}"></Text>
+									</header>
+								</Column>
+								<Column>
+									<header>
+										<Text text="{i18n>CustomerRatingHeader}"></Text>
+									</header>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{customerService>cust_id}" visible="hidden"/>
+										<Text text="{customerService>first_name}"/>
+										<Text text="{customerService>last_name}"/>
+										<Text text="{customerService>cnp}"/>
+										<Text text="{customerService>adress}"/>
+										<Text text="{customerService>county_name}"/>
+										<Text text="{customerService>phonenumber}" />
+										<Text text="{customerService>email}" />
+										<Text text="{customerService>rating}" />
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+		</VBox>
+		<buttons>
+			<Button text="{i18n>getDamageHistoryButton}" id="retrieveDataButton" press="._onRetrieveDamageHistory"/>
+			<Button text="{i18n>closeDialogCusomerDetails}" press="._onCloseCustomerDataDialog"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
