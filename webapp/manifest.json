@@ -48,7 +48,7 @@
 			},
 			"carPolicyService": {
 				"type": "OData",
-				"uri": "/sap/opu/odata/SAP/ZINS_C_CARPOLICYTP_SRV",
+				"uri": "/sap/opu/odata/SAP/ZINS_C_CARPOLICYTP_SRV_01",
 				"settings": {
 					"odataVersion": "2.0",
 					"localUri": "./localService/metadataCarPolicy.xml"

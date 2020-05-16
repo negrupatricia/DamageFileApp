@@ -98,7 +98,7 @@ sap.ui.define([
 			}
 			return this.customerData;
 		},
-		_onCustomerDataValueHelpRequest: function (){
+		_onCustomerDataValueHelpRequest: function () {
 			var oDelayModel = new JSONModel({
 				busy: false,
 				delay: 0
@@ -122,7 +122,7 @@ sap.ui.define([
 			oDelayModel.setProperty("/delay", 0);
 			this.getView().setModel(oDelayModel, "gradedDelay");
 			var aItems = sap.ui.getCore().byId("customerData--CustomerTable").getItems();
-			
+
 			for (var i = 0; i < aItems.length; i++) {
 				if (aItems[i].getSelected()) {
 					aSelectedItems.push(aItems[i]);
@@ -145,37 +145,37 @@ sap.ui.define([
 
 				var id = aSelectedItems[0].mAggregations.cells[0].mProperties.text;
 				var oFilterID = new Filter("cust_id", FilterOperator.EQ, id);
-				
+
 
 				var that = this;
 
-					that.getView().getModel("damageFileService").read("/ZINS_C_DMGFILETP", {
+				that.getView().getModel("damageFileService").read("/ZINS_C_DMGFILETP", {
 					method: "GET",
 					filters: [oFilterID],
 					success: function (oData) {
 						oView.getModel("DamageHist").getData().aEntries = []
 						that.getView().byId("DamageFiles").setText(oData.results.length);
-						if(oData.results.length === 0){
+						if (oData.results.length === 0) {
 							MessageToast.show(oBundle.getText("noDamageHistory"));
 						}
 						else {
-						for (var i = 0; i < oData.results.length; i++) {
-							if(oData.results[i].total_damage){
-								oData.results[i]["total_damage"] = "Yes";
+							for (var i = 0; i < oData.results.length; i++) {
+								if (oData.results[i].total_damage) {
+									oData.results[i]["total_damage"] = "Yes";
+								}
+								else oData.results[i]["total_damage"] = "No";
+
+								if (oData.results[i].isarchived) {
+									oData.results[i]["isarchived"] = "Closed";
+								}
+								else oData.results[i]["isarchived"] = "Active";
+								oView.getModel("DamageHist").getProperty("/aEntries").push(oData.results[i]);
 							}
-							else oData.results[i]["total_damage"] = "No";
-							
-							if(oData.results[i].isarchived){
-								oData.results[i]["isarchived"] = "Closed";
-							}
-							else oData.results[i]["isarchived"] = "Active";
-							oView.getModel("DamageHist").getProperty("/aEntries").push(oData.results[i]);
+							oView.getModel("DamageHist").refresh();
 						}
-						oView.getModel("DamageHist").refresh();
-					}
 						oDelayModel.setProperty("/busy", false);
 					}.bind(this),
-					error: function() {
+					error: function () {
 						MessageToast.show(oBundle.getText("nocust"));
 					}
 				});
@@ -184,18 +184,18 @@ sap.ui.define([
 			this._onCloseCustomerDataDialog();
 
 		},
-		_onSearchCustomers :function (oEvent){
+		_onSearchCustomers: function (oEvent) {
 			var oView = this.getView();
 			var aFilter = [];
 			var sQuery = oEvent.getParameter("query");
 			aFilter = new Filter({
-					filters: [
-						new Filter("first_name",FilterOperator.Contains,sQuery),
-						new Filter("last_name",FilterOperator.Contains,sQuery),
-						new Filter("county_name",FilterOperator.Contains,sQuery),
-						new Filter("phonenumber",FilterOperator.Contains,sQuery),
-						new Filter("cnp",FilterOperator.Contains,sQuery)
-					]
+				filters: [
+					new Filter("first_name", FilterOperator.Contains, sQuery),
+					new Filter("last_name", FilterOperator.Contains, sQuery),
+					new Filter("county_name", FilterOperator.Contains, sQuery),
+					new Filter("phonenumber", FilterOperator.Contains, sQuery),
+					new Filter("cnp", FilterOperator.Contains, sQuery)
+				]
 			});
 
 			var oTable = sap.ui.getCore().byId("customerData--CustomerTable");
@@ -219,9 +219,9 @@ sap.ui.define([
 			return this.sortCustomerData;
 		},
 
-		_onAscendingSortCustomerData: function() {
+		_onAscendingSortCustomerData: function () {
 			var oTable = sap.ui.getCore().byId("customerData--CustomerTable");
-  			var oBinding = oTable.getBinding("items");
+			var oBinding = oTable.getBinding("items");
 			var oBundle = this.getView().getModel("i18n").getResourceBundle();
 			var aSorters = [];
 
@@ -229,36 +229,32 @@ sap.ui.define([
 			var sortByCounty = sap.ui.getCore().byId("sortCustomerData--sortby2").getSelected();
 			var sortByRating = sap.ui.getCore().byId("sortCustomerData--sortby3").getSelected();
 
-			if(sortByName === true)
-			{
+			if (sortByName === true) {
 				var mParams = "last_name";
-				var sPath = mParams;									
-  				aSorters.push(new sap.ui.model.Sorter(sPath, false));
-  				oBinding.sort(aSorters);
+				var sPath = mParams;
+				aSorters.push(new sap.ui.model.Sorter(sPath, false));
+				oBinding.sort(aSorters);
 				this._onCloseCustomerDataSortDialog();
-			} else if(sortByCounty === true)
-			{
+			} else if (sortByCounty === true) {
 				var mParams = "county_name";
-				var sPath = mParams;									
-  				aSorters.push(new sap.ui.model.Sorter(sPath, false));
-  				oBinding.sort(aSorters);
+				var sPath = mParams;
+				aSorters.push(new sap.ui.model.Sorter(sPath, false));
+				oBinding.sort(aSorters);
 				this._onCloseCustomerDataSortDialog();
-			} else if(sortByRating === true)
-			{
+			} else if (sortByRating === true) {
 				var mParams = "rating";
-				var sPath = mParams;									
-  				aSorters.push(new sap.ui.model.Sorter(sPath, false));
-  				oBinding.sort(aSorters);
+				var sPath = mParams;
+				aSorters.push(new sap.ui.model.Sorter(sPath, false));
+				oBinding.sort(aSorters);
 				this._onCloseCustomerDataSortDialog();
-			} else
-			{
+			} else {
 				MessageToast.show(oBundle.getText("chooseColumn"));
 			}
 		},
 
-		_onDescendingSortCustomerData: function() {
+		_onDescendingSortCustomerData: function () {
 			var oTable = sap.ui.getCore().byId("customerData--CustomerTable");
-  			var oBinding = oTable.getBinding("items");
+			var oBinding = oTable.getBinding("items");
 			var oBundle = this.getView().getModel("i18n").getResourceBundle();
 			var aSorters = [];
 
@@ -266,32 +262,113 @@ sap.ui.define([
 			var sortByCounty = sap.ui.getCore().byId("sortCustomerData--sortby2").getSelected();
 			var sortByRating = sap.ui.getCore().byId("sortCustomerData--sortby3").getSelected();
 
-			if(sortByName === true)
-			{
+			if (sortByName === true) {
 				//MessageToast.show("Sort descending by Name");
 				var mParams = "last_name";
-				var sPath = mParams;									
-  				aSorters.push(new sap.ui.model.Sorter(sPath, true));
-  				oBinding.sort(aSorters);
+				var sPath = mParams;
+				aSorters.push(new sap.ui.model.Sorter(sPath, true));
+				oBinding.sort(aSorters);
 				this._onCloseCustomerDataSortDialog();
-			} else if(sortByCounty === true)
-			{
+			} else if (sortByCounty === true) {
 				var mParams = "county_name";
-				var sPath = mParams;									
-  				aSorters.push(new sap.ui.model.Sorter(sPath, true));
-  				oBinding.sort(aSorters);
+				var sPath = mParams;
+				aSorters.push(new sap.ui.model.Sorter(sPath, true));
+				oBinding.sort(aSorters);
 				this._onCloseCustomerDataSortDialog();
-			} else if(sortByRating === true)
-			{
+			} else if (sortByRating === true) {
 				var mParams = "rating";
-				var sPath = mParams;									
-  				aSorters.push(new sap.ui.model.Sorter(sPath, true));
-  				oBinding.sort(aSorters);
+				var sPath = mParams;
+				aSorters.push(new sap.ui.model.Sorter(sPath, true));
+				oBinding.sort(aSorters);
 				this._onCloseCustomerDataSortDialog();
-			} else
-			{
+			} else {
 				MessageToast.show(oBundle.getText("chooseColumn"));
 			}
+		},
+		_getCountyName: function (county_id) {
+			var that = this;
+			return new Promise(function (resolve, reject) {
+				var oView = that.getView();
+				oView.getModel("countyService").read("/ZINS_C_COUNTYTP(" + county_id + ")", {
+					method: "GET",
+					success: function (oData) {
+						resolve(oData.county_name);
+					}.bind(this),
+					error: function (oError) {
+						reject(oError);
+					}
+				});
+			})
+		},
+
+		_getCustomerInfo: function (cust_id) {
+			var that = this;
+			return new Promise(function (resolve, reject) {
+				var oView = that.getView();
+				oView.getModel("customerService").read("/ZINS_C_CUSTOMERTP(" + cust_id + ")", {
+					method: "GET",
+					success: function (oData) {
+						resolve(oData)
+					}.bind(this),
+					error: function (oError) {
+						reject(oError);
+					}
+				});
+			})
+		},
+
+		_getVehicleInfo: function (ins_car_id) {
+			var that = this;
+			return new Promise(function (resolve, reject) {
+				var oView = that.getView();
+				oView.getModel("customerService").read("/ZINS_C_INSUREDCARTP(" + ins_car_id + ")", {
+					method: "GET",
+					success: function (oData) {
+						resolve(oData)
+					}.bind(this),
+					error: function (oError) {
+						reject(oError);
+					}
+				});
+			})
+		},
+
+		seeDamageFileDetails: async function (oEvent) {
+			var county_name, customer_info, vehicle_info;
+			var oDamageFileId = oEvent.getSource().getParent().getAggregation("cells")[0].getProperty("text");
+			var damageFiles = this.getView().byId("damageFilesTable").getBinding("items").getModel().oData;
+			var path = "ZINS_C_DMGFILETP(" + oDamageFileId.toLocaleString() + ")";
+			var currentDamageFile = damageFiles[path];
+			var oDamageFileDetail = new JSONModel({
+				description: "",
+				file_id: 0,
+				car_make: "",
+				car_model: "",
+				vin: "",
+				name: "",
+				cnp: "",
+				county: "",
+				incident_date: "",
+				compensation: 0
+			});
+			oDamageFileDetail.setProperty("/description", currentDamageFile.description);
+			oDamageFileDetail.setProperty("/incident_date", currentDamageFile.incident_date);
+			oDamageFileDetail.setProperty("/compensation", currentDamageFile.compensation);
+			oDamageFileDetail.setProperty("/file_id", currentDamageFile.file_id);
+
+			county_name = await this._getCountyName(currentDamageFile.county);
+			oDamageFileDetail.setProperty("/county", county_name);
+
+			customer_info = await this._getCustomerInfo(currentDamageFile.cust_id);
+			oDamageFileDetail.setProperty("/name", customer_info.first_name + " " + customer_info.last_name);
+			oDamageFileDetail.setProperty("/cnp", customer_info.cnp);
+
+			vehicle_info = await _getVehicleInfo(currentDamageFile.ins_car_id);
+			oDamageFileDetail.setProperty("/car_make", vehicle_info.car_name);
+			oDamageFileDetail.setProperty("/car_model", vehicle_info.model_name);
+			oDamageFileDetail.setProperty("/vin", vehicle_info.vin_number);
+
+
 		}
 	});
 });
