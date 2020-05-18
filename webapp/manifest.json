@@ -113,7 +113,7 @@
 				"dataSource": "carMakeService"
 			},
 			"carPolicyService": {
-				"dataSource": "countyService"
+				"dataSource": "carPolicyService"
 			}
 		},
 		"resources": {

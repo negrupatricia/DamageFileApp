@@ -40,7 +40,7 @@
 				<Toolbar id="buttons">
 
 					<ToolbarSpacer/>
-
+					<Button id= "archiveDamageFile" visible="{oButtonsModel>/enabledArchiveDamageFile}" text="{i18n>archiveDamageFile}" press=".onArchiveDamageFile"/>
 				</Toolbar>
 			</footer>
 		</Page>

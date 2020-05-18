@@ -1,0 +1,54 @@
+<core:FragmentDefinition xmlns="sap.m" 
+    xmlns:core="sap.ui.core">
+    <Dialog id="editDamageFileDetailsDialog" title="{i18n>EditDamageFileDetailsDialogTitle}" icon="sap-icon://hint" type="Message" busy="{damageFileDetail>/busy}" busyIndicatorDelay="{damageFileDetail>/delay}">
+        <VBox alignContent="SpaceBetween">
+            <HBox>
+                <Label text="{i18n>FileId}" class="sapUiSmallMarginEnd"></Label>
+                <Text text="{damageFileDetail>/file_id}"></Text>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>Name}" class="sapUiSmallMarginEnd"></Label>
+                <Text text="{damageFileDetail>/name}"></Text>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>CountyName}" class="sapUiSmallMarginEnd"></Label>
+                <Text text="{damageFileDetail>/county}"></Text>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>CarMake}" class="sapUiSmallMarginEnd"></Label>
+                <Text text="{damageFileDetail>/car_make}"></Text>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>CarModel}" class="sapUiSmallMarginEnd"></Label>
+                <Text text="{damageFileDetail>/car_model}"></Text>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>IncidentDate}" class="sapUiSmallMarginEnd"></Label>
+                <Text text="{path:'damageFileDetail>/incident_date', type: 'sap.ui.model.type.Date'}"></Text>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>Description}" class="sapUiSmallMarginEnd"></Label>
+                <TextArea id="damageFileDescriptionID" placeholder="{i18n>Description}" value="{damageFileDetail>/description}" growing="false"></TextArea>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <CheckBox id="damageFileTotalDamageID" text="{i18n>TotalDamage}" selected="true" enabled="true"></CheckBox>
+            </HBox>
+            <Label></Label>
+            <HBox>
+                <Label text="{i18n>Compensation}" class="sapUiSmallMarginEnd"></Label>
+                <Input id="damageFileCompensationID" value="{damageFileDetail>/compensation}" placeholder="{i18n>Compensation}" type="Number" description="RON"></Input>
+            </HBox>
+        </VBox>
+        <buttons>
+            <Button text="{i18n>saveDialogDamageFileDetails}" press=".onSaveEditDamageFileDialog"/>
+            <Button text="{i18n>closeDialogDamageFileDetails}" press=".onCloseEditDamageFileDialog"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

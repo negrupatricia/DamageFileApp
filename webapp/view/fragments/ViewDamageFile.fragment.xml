@@ -24,7 +24,7 @@
                                     </fb:FilterItem>
                                 </fb:filterItems>
                             </fb:FilterBar>
-                            <Table headerText="Damage Files" growing="true" id="damageFilesTable" items="{path: 'damageFileService>/ZINS_C_DMGFILETP' , sorter: { path: 'incident_date', descending: true }, filters: [{ path: 'isarchived', operator: 'NE',  value1: 'X' }]}">
+                            <Table headerText="Damage Files" growing="true" id="damageFilesTable" items="{path: 'damageFileService>/ZINS_C_DMGFILETP' , sorter: { path: 'incident_date', descending: true }, filters: [{ path: 'isarchived', operator: 'NE',  value1: 'X' }]}" mode="SingleSelectLeft" selectionChange="_enableArchiveDamageButton">
                                 <headerToolbar>
                                     <Toolbar>
                                         <Title text="{i18n>listDamageFiles}"/>

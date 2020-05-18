@@ -14,11 +14,36 @@ sap.ui.define([
 			var oView = this.getView();
 			oView.setModel(this.getOwnerComponent().getModel("damageFileService"), "damageFileService");
 			oView.setModel(this.getOwnerComponent().getModel("customerService"), "customerService");
+			oView.setModel(this.getOwnerComponent().getModel("countyService"), "countyService");
+			oView.setModel(this.getOwnerComponent().getModel("carMakeService"), "carMakeService");
+			oView.setModel(this.getOwnerComponent().getModel("carPolicyService"), "carPolicyService");
 			var DamageHist = new JSONModel({
 				aEntries: []
 			});
 			oView.setModel(DamageHist, "DamageHist");
+			var oButtonsModel = new JSONModel({
+				enabledArchiveDamageFile: true
+			});
+			oView.setModel(oButtonsModel, "oButtonsModel");
+
 		},
+
+		_enableButtons: function (oEvent) {
+
+			var selectedItem = oEvent.getParameters().item.getProperty("key");
+			var oButtonsModel = this.getView().getModel("oButtonsModel");
+			this.getView().byId("damageFilesTable").setMode(sap.m.ListMode.None);
+			oButtonsModel.setProperty("/enabledArchiveDamageFile", true);
+			if (selectedItem === "createDamageFileKey") {
+				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+			} else if (selectedItem === "viewDamageHistoryFileKey") {
+				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+			} else if (selectedItem === "dataAnalysisFileKey") {
+				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+			}
+
+		},
+
 		_onItemSelect: function (oEvent) {
 			var item = oEvent.getParameter('item');
 			var viewId = this.getView().getId();
@@ -321,7 +346,7 @@ sap.ui.define([
 			var that = this;
 			return new Promise(function (resolve, reject) {
 				var oView = that.getView();
-				oView.getModel("customerService").read("/ZINS_C_INSUREDCARTP(" + ins_car_id + ")", {
+				oView.getModel("carPolicyService").read("/ZINS_C_INSUREDCARTP(" + ins_car_id + ")", {
 					method: "GET",
 					success: function (oData) {
 						resolve(oData)
@@ -333,6 +358,121 @@ sap.ui.define([
 			})
 		},
 
+		getDialogDamageFileDetails: function () {
+
+			if (!this.damageFileDetailsDialog) {
+				this.damageFileDetailsDialog = sap.ui.xmlfragment("damageFileDetailsDialog",
+					"damageFile.DamageFiles.view.fragments.ViewDamageFileDetails", this);
+				this.getView().addDependent(this.damageFileDetailsDialog);
+			}
+			return this.damageFileDetailsDialog;
+		},
+
+		getEditDialogDamageFile: function () {
+
+			if (!this.editDamageFileDetailsDialog) {
+				this.editDamageFileDetailsDialog = sap.ui.xmlfragment("editDamageFileDetailsDialog",
+					"damageFile.DamageFiles.view.fragments.EditDamageFileDetails", this);
+				this.getView().addDependent(this.editDamageFileDetailsDialog);
+			}
+			return this.editDamageFileDetailsDialog;
+		},
+
+		onCloseDamageFileDialog: function () {
+			this.getDialogDamageFileDetails().close();
+		},
+
+		onCloseEditDamageFileDialog: function () {
+			this.getEditDialogDamageFile().close();
+		},
+
+		_validateDeleteDamageFile: function () {
+			var oView = this.getView();
+			var damageFile = oView.byId("damageFilesTable").getSelectedItem();
+			return damageFile;
+		},
+
+		editQuestionDetails: async function (oEvent) {
+			var county_name, customer_info, vehicle_info, tDamage;
+			var oDamageFileId = oEvent.getSource().getParent().getAggregation("cells")[0].getProperty("text");
+			var damageFiles = this.getView().byId("damageFilesTable").getBinding("items").getModel().oData;
+			var path = "ZINS_C_DMGFILETP(" + oDamageFileId.toLocaleString() + ")";
+			var currentDamageFile = damageFiles[path];
+			var oDamageFileDetail = new JSONModel({
+				delay: 0,
+				busy: false,
+				description: "",
+				file_id: 0,
+				car_make: "",
+				car_model: "",
+				vin: "",
+				name: "",
+				cnp: "",
+				county: "",
+				incident_date: "",
+				compensation: 0,
+				total_damage: false
+			});
+			oDamageFileDetail.setProperty("/description", currentDamageFile.description);
+			oDamageFileDetail.setProperty("/incident_date", currentDamageFile.incident_date);
+			oDamageFileDetail.setProperty("/compensation", currentDamageFile.compensation);
+			oDamageFileDetail.setProperty("/file_id", currentDamageFile.file_id);
+			oDamageFileDetail.setProperty("/delay", 0);
+			oDamageFileDetail.setProperty("/busy", true);
+
+			if (currentDamageFile.total_damage === "X") {
+				tDamage = true;
+			} else {
+				tDamage = false;
+			}
+			oDamageFileDetail.setProperty("/total_damage", tDamage);
+
+			county_name = await this._getCountyName(currentDamageFile.county);
+			oDamageFileDetail.setProperty("/county", county_name);
+
+			customer_info = await this._getCustomerInfo(currentDamageFile.cust_id);
+			oDamageFileDetail.setProperty("/name", customer_info.first_name + " " + customer_info.last_name);
+			oDamageFileDetail.setProperty("/cnp", customer_info.cnp);
+
+			vehicle_info = await this._getVehicleInfo(currentDamageFile.ins_car_id);
+			oDamageFileDetail.setProperty("/car_make", vehicle_info.car_name);
+			oDamageFileDetail.setProperty("/car_model", vehicle_info.model_name);
+			oDamageFileDetail.setProperty("/vin", vehicle_info.vin_number);
+
+			this.getEditDialogDamageFile().setModel(oDamageFileDetail, "damageFileDetail");
+			this.getEditDialogDamageFile().open();
+			oDamageFileDetail.setProperty("/busy", false);
+
+
+		},
+
+		onArchiveDamageFile: function () {
+			var oView = this.getView();
+			var oEntry = {};
+			var flag = 0;
+			oEntry.isarchived = 'X';
+			if (this._validateDeleteDamageFile() === null) {
+				MessageToast.show("Please select a damage file!");
+				return;
+			} else {
+				var selectedFileId = oView.byId("damageFilesTable").getSelectedItem().mAggregations.cells[0].mProperties.text;
+				oView.getModel("damageFileService").update("/ZINS_C_DMGFILETP(" + selectedFileId.toLocaleString() + ")",
+					oEntry, {
+					success: function () {
+						MessageToast.show("Damage File have been archived successfully!");
+						oView.getModel("damageFileService").refresh();
+					},
+					error: function () { }
+				});
+			}
+		},
+
+		_enableArchiveDamageButton: function () {
+			var oView = this.getView();
+			oView.byId("archiveDamageFile").setEnabled(true);
+
+		},
+
 		seeDamageFileDetails: async function (oEvent) {
 			var county_name, customer_info, vehicle_info;
 			var oDamageFileId = oEvent.getSource().getParent().getAggregation("cells")[0].getProperty("text");
@@ -340,6 +480,8 @@ sap.ui.define([
 			var path = "ZINS_C_DMGFILETP(" + oDamageFileId.toLocaleString() + ")";
 			var currentDamageFile = damageFiles[path];
 			var oDamageFileDetail = new JSONModel({
+				delay: 0,
+				busy: false,
 				description: "",
 				file_id: 0,
 				car_make: "",
@@ -355,6 +497,8 @@ sap.ui.define([
 			oDamageFileDetail.setProperty("/incident_date", currentDamageFile.incident_date);
 			oDamageFileDetail.setProperty("/compensation", currentDamageFile.compensation);
 			oDamageFileDetail.setProperty("/file_id", currentDamageFile.file_id);
+			oDamageFileDetail.setProperty("/delay", 0);
+			oDamageFileDetail.setProperty("/busy", true);
 
 			county_name = await this._getCountyName(currentDamageFile.county);
 			oDamageFileDetail.setProperty("/county", county_name);
@@ -363,12 +507,46 @@ sap.ui.define([
 			oDamageFileDetail.setProperty("/name", customer_info.first_name + " " + customer_info.last_name);
 			oDamageFileDetail.setProperty("/cnp", customer_info.cnp);
 
-			vehicle_info = await _getVehicleInfo(currentDamageFile.ins_car_id);
+			vehicle_info = await this._getVehicleInfo(currentDamageFile.ins_car_id);
 			oDamageFileDetail.setProperty("/car_make", vehicle_info.car_name);
 			oDamageFileDetail.setProperty("/car_model", vehicle_info.model_name);
 			oDamageFileDetail.setProperty("/vin", vehicle_info.vin_number);
 
+			this.getDialogDamageFileDetails().setModel(oDamageFileDetail, "damageFileDetail");
+			this.getDialogDamageFileDetails().open();
+			oDamageFileDetail.setProperty("/busy", false);
+		},
 
+		onSaveEditDamageFileDialog: function () {
+			var oView = this.getView();
+			var oDamageModel = this.getEditDialogDamageFile().getModel("damageFileDetail");
+			var fileId = oDamageModel.oData.file_id;
+			var totalDamage;
+			var oDamage = {};
+
+			var damageFileDescription = sap.ui.getCore().byId("editDamageFileDetailsDialog--damageFileDescriptionID").getValue();
+			var damageFileTotalDamage = sap.ui.getCore().byId("editDamageFileDetailsDialog--damageFileTotalDamageID").getSelected();
+			var damageFileCompensation = sap.ui.getCore().byId("editDamageFileDetailsDialog--damageFileCompensationID").getValue();
+
+			if (damageFileTotalDamage === true) {
+				totalDamage = "X";
+			} else {
+				totalDamage = "";
+			}
+
+			oDamage.description = damageFileDescription;
+			oDamage.total_damage = totalDamage;
+			oDamage.compensation = damageFileCompensation;
+
+			oView.getModel("damageFileService").update("/ZINS_C_DMGFILETP(" + fileId + ")", oDamage, {
+				success: function (oResponse) {
+					this.getEditDialogDamageFile().close();
+					MessageToast.show("Damage file updated!");
+				}.bind(this),
+				error: function () {
+					MessageToast.show("Damage file could not be updated!");
+				}
+			});
 		}
 	});
 });
