@@ -14,6 +14,7 @@
 							<tnt:NavigationListItem id="createDamageFileID" text="{i18n>createDamageFileLabel}" icon="sap-icon://collision" key="createDamageFileKey"></tnt:NavigationListItem>
 							<tnt:NavigationListItem id="viewDamageHistoryID" text="{i18n>viewDamageHistoryFileLabel}" icon="sap-icon://activity-individual" key="viewDamageHistoryFileKey"></tnt:NavigationListItem>
 							<tnt:NavigationListItem id="dataAnalysisID" text="{i18n>dataAnalysisLabel}" icon="sap-icon://filter-analytics" key="dataAnalysisFileKey"></tnt:NavigationListItem>
+							<tnt:NavigationListItem id="customerAgeChartID" text="{i18n>customerAgeChartLabel}" icon="sap-icon://filter-analytics" key="customerAgeFileKey"></tnt:NavigationListItem>
 						</tnt:NavigationList>
 					</tnt:SideNavigation>
 				</tnt:sideContent>
@@ -31,6 +32,9 @@
 							</ScrollContainer>
 							<ScrollContainer id="dataAnalysisFileKey" height="90%">
 								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewChartDataAnalysis" type="XML"/>
+							</ScrollContainer>
+							<ScrollContainer id="customerAgeFileKey" height="90%">
+								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewCustomerAgeChart" type="XML"/>
 							</ScrollContainer>
 						</pages>
 					</NavContainer>

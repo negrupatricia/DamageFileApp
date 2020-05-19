@@ -10,13 +10,33 @@ sap.ui.define([
 	jQuery.sap.require('sap.m.MessageToast');
 
 	return Controller.extend("damageFile.DamageFiles.controller.DamageFile", {
+
 		onInit: function () {
+
 			var oView = this.getView();
 			oView.setModel(this.getOwnerComponent().getModel("damageFileService"), "damageFileService");
 			oView.setModel(this.getOwnerComponent().getModel("customerService"), "customerService");
 			oView.setModel(this.getOwnerComponent().getModel("countyService"), "countyService");
 			oView.setModel(this.getOwnerComponent().getModel("carMakeService"), "carMakeService");
 			oView.setModel(this.getOwnerComponent().getModel("carPolicyService"), "carPolicyService");
+
+			// var oCustomerAgeModel = new JSONModel({
+			// 	"pieData": [
+			// 		{
+			// 			"group": "18-30 years",
+			// 			"procentage": "30"
+			// 		},
+			// 		{
+			// 			"group": "31-60 years",
+			// 			"procentage": "20"
+			// 		},
+			// 		{
+			// 			"group": ">60 years",
+			// 			"procentage": "10"
+			// 		}]
+			// })
+			// oView.setModel(oCustomerAgeModel, "oCustomerAgeModel");
+
 			var DamageHist = new JSONModel({
 				aEntries: []
 			});
@@ -25,7 +45,39 @@ sap.ui.define([
 				enabledArchiveDamageFile: true
 			});
 			oView.setModel(oButtonsModel, "oButtonsModel");
-
+			var young = 0, medium = 0, senior = 0;
+			oView.getModel("customerService").read("/ZINS_C_CUSTOMERTP", {
+				method: "GET",
+				success: function (oData) {
+					for (var i = 0; i < oData.results.length; i++) {
+						if (parseInt(oData.results[i].age) > 17 && parseInt(oData.results[i].age) < 31) {
+							young++;
+						} else if (parseInt(oData.results[i].age) > 30 && parseInt(oData.results[i].age) < 61) {
+							medium++;
+						} else {
+							senior++;
+						}
+					}
+					var oCustomerAgeModel = new JSONModel({
+						"pieData": [
+							{
+								"group": "18-30 years",
+								"percentage": young
+							},
+							{
+								"group": "31-60 years",
+								"percentage": medium
+							},
+							{
+								"group": ">60 years",
+								"percentage": senior
+							}]
+					})
+					oView.setModel(oCustomerAgeModel, "oCustomerAgeModel");
+				}.bind(this),
+				error: function (oError) {
+				}
+			});
 		},
 
 		_enableButtons: function (oEvent) {
@@ -33,14 +85,18 @@ sap.ui.define([
 			var selectedItem = oEvent.getParameters().item.getProperty("key");
 			var oButtonsModel = this.getView().getModel("oButtonsModel");
 			this.getView().byId("damageFilesTable").setMode(sap.m.ListMode.None);
-			oButtonsModel.setProperty("/enabledArchiveDamageFile", true);
+			//oButtonsModel.setProperty("/enabledArchiveDamageFile", true);
 			if (selectedItem === "createDamageFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
 			} else if (selectedItem === "viewDamageHistoryFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
 			} else if (selectedItem === "dataAnalysisFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+			} else if (selectedItem === "viewDamageFileKey") {
+				oButtonsModel.setProperty("/enabledArchiveDamageFile", true);
 			}
+
+
 
 		},
 
