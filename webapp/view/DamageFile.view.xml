@@ -45,6 +45,8 @@
 
 					<ToolbarSpacer/>
 					<Button id= "archiveDamageFile" visible="{oButtonsModel>/enabledArchiveDamageFile}" text="{i18n>archiveDamageFile}" press=".onArchiveDamageFile"/>
+					<Button id= "clearDamageFile" visible="{oButtonsModel>/enabledClearDamageFile}" text="{i18n>clearDamageFileButton}" press=".onClearDamageFileData"/>
+					<Button id= "createDamageFile" visible="{oButtonsModel>/enabledCreateDamageFile}" text="{i18n>createDamageFileButton}" press=".onCreateDamageFile"/>
 				</Toolbar>
 			</footer>
 		</Page>

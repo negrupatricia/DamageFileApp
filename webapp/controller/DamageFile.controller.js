@@ -41,6 +41,10 @@ sap.ui.define([
 				aEntries: []
 			});
 			oView.setModel(DamageHist, "DamageHist");
+			var InsuredCar = new JSONModel({
+				aEntries: []
+			});
+			oView.setModel(InsuredCar, "InsuredCar");
 			var oButtonsModel = new JSONModel({
 				enabledArchiveDamageFile: true
 			});
@@ -78,6 +82,12 @@ sap.ui.define([
 				error: function (oError) {
 				}
 			});
+
+			var oInput = this.byId('dmgfileCustomer');
+			oInput.setSuggestionRowValidator(this.suggestionRowValidator);
+
+			var oInputInsuredCar = this.byId('insuredCar');
+			oInput.setSuggestionRowValidator(this.suggestionRowValidatorInsuredCar);
 		},
 
 		_enableButtons: function (oEvent) {
@@ -88,16 +98,21 @@ sap.ui.define([
 			//oButtonsModel.setProperty("/enabledArchiveDamageFile", true);
 			if (selectedItem === "createDamageFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+				oButtonsModel.setProperty("/enabledCreateDamageFile", true);
+				oButtonsModel.setProperty("/enabledClearDamageFile", true);
 			} else if (selectedItem === "viewDamageHistoryFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+				oButtonsModel.setProperty("/enabledCreateDamageFile", false);
+				oButtonsModel.setProperty("/enabledClearDamageFile", false);
 			} else if (selectedItem === "dataAnalysisFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", false);
+				oButtonsModel.setProperty("/enabledCreateDamageFile", false);
+				oButtonsModel.setProperty("/enabledClearDamageFile", false);
 			} else if (selectedItem === "viewDamageFileKey") {
 				oButtonsModel.setProperty("/enabledArchiveDamageFile", true);
+				oButtonsModel.setProperty("/enabledCreateDamageFile", false);
+				oButtonsModel.setProperty("/enabledClearDamageFile", false);
 			}
-
-
-
 		},
 
 		_onItemSelect: function (oEvent) {
@@ -603,6 +618,230 @@ sap.ui.define([
 					MessageToast.show("Damage file could not be updated!");
 				}
 			});
+		},
+
+	suggestionRowValidator: function (oColumnListItem) {
+			var aCells = oColumnListItem.getCells();
+
+			return new sap.ui.core.Item({
+				key: aCells[0].getText(),
+				text: aCells[1].getText()
+			});
+	},
+
+	_suggestionItemSelected: function (evt) {
+
+		var oInput = this.byId('dmgfileCustomer'),
+			oText = this.byId('selectedKey'),
+			sKey = oInput.getSelectedKey();
+
+		oText.setText(sKey);
+	},
+
+	_onSubmitSelection: function(oEvent){
+		var oLabel = this.byId('dmgfileCar').setVisible(true),
+			oInputInsuredCar = this.byId('insuredCar').setVisible(true),
+			oInput = this.byId('dmgfileCustomer'),
+			sKey = oInput.getSelectedKey(),
+			oFilterCustID = new Filter("cust_id", FilterOperator.EQ, sKey),
+			that = this,
+			aActivePolicies = [],
+			myDate = new Date(),
+			hasActivePolicy = 0;
+
+				that.getView().getModel("carPolicyService").read("/ZINS_C_CARPOLICYTP", {
+					method: "GET",
+					filters: [oFilterCustID],
+					success: function (oData) {
+						if(oData.results.length == 0){
+							that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.Error);
+							that.byId('dmgfileCustomer').setValueStateText("The selected user does not have a policy!");
+						}
+						else{
+							that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.None);
+							hasActivePolicy = 0;
+							for(var i = 0; i < oData.results.length; i++){
+								if(oData.results[i]["end_date"] > myDate){
+									hasActivePolicy = 1;
+									aActivePolicies.push(oData.results[i]["policy_id"]);
+								}
+							}
+
+							if(hasActivePolicy === 0)
+							{
+								that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.Error);
+								that.byId('dmgfileCustomer').setValueStateText("The selected user does not have an active policy!");
+							}
+							else{
+								this._findInsuredCars(aActivePolicies);
+							}
+						}
+					}.bind(this),
+					error: function () {
+						MessageToast.show("The selected user does not exist!");
+					}
+				});
+		
+	},
+	_findInsuredCars: function(aActivePolicies){
+		var oView = this.getView();
+		oView.getModel("InsuredCar").getData().aEntries = [];
+
+		for(var i = 0; i< aActivePolicies.length; i++){
+			oView.getModel("carPolicyService").read("/ZINS_C_CARPOLICYTP("+ aActivePolicies[i] +
+			 ")/to_InsuredCar",{
+				method: "GET",
+				success: function (oData) {
+					oView.getModel("InsuredCar").getProperty("/aEntries").push(oData.results[0]);
+					oView.getModel("InsuredCar").refresh();
+				},
+				error: function () {
+					MessageToast.show("The selected user does not exist!");
+				}
+			});
 		}
+	},
+	suggestionRowValidatorInsuredCar: function (oColumnListItem) {
+		var aCells = oColumnListItem.getCells();
+
+		return new sap.ui.core.Item({
+			key: aCells[0].getText(),
+			text: aCells[1].getText()
+		});
+	},
+	onClearDamageFileData: function () {
+		var oView = this.getView();  
+		this.byId('dmgfileCustomer').setValue("");
+		this.byId('selectedKey').setText("");
+		this.byId('dmgfilecounty').setSelectedItem(null);
+		this.byId('dmgfiledescription').setValue();
+		this.byId('dmgfileCar').setVisible(false);
+		this.byId('insuredCar').setValue("");
+		this.byId('insuredCar').setVisible(false);
+		this.byId('dmgfiledate').setValue(null);
+		this.byId('dmgfiletime').setValue(null);
+		this.byId('dmgfileTotalDamage').setSelected(false);
+		this.byId('damageFileCompensationID').setValue(null);
+	},
+	onCreateDamageFile: function () {
+		var oView = this.getView(),
+			oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+
+		if (this._validateEntry() === true) {
+			var oDamageFile = {};
+
+			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-ddTHH:mm:ss" });
+			var dmgfileincident_date = oDateFormat.format(new Date(oView.byId("dmgfiledate").getValue())); 
+
+			var oTimeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern : "PTHH'H'mm'M'ss'S'"});
+			var dmgfiletime = oTimeFormat.format(new Date(oView.byId('dmgfiletime').getDateValue()));
+
+			var dmgfilecompensation = oView.byId('damageFileCompensationID').getValue(),
+				dmgfilecounty = oView.byId('dmgfilecounty').getSelectedKey(),
+				dmgfilecust_id = oView.byId('dmgfileCustomer').getSelectedKey(),
+				dmgfileins_car_id = oView.byId('insuredCar').getValue(),
+				dmgfiledescription = oView.byId('dmgfiledescription').getValue(),
+				damageFileTotalDamage = oView.byId('dmgfileTotalDamage').getSelected(),
+				dmgtotalDamage;
+
+				if (damageFileTotalDamage === true) {
+					dmgtotalDamage = "X";
+				} else {
+					dmgtotalDamage = "";
+				}
+				
+
+			oDamageFile.compensation = dmgfilecompensation;
+			oDamageFile.county = parseInt(dmgfilecounty);
+			oDamageFile.cust_id = parseInt(dmgfilecust_id);
+			oDamageFile.ins_car_id = parseInt(dmgfileins_car_id);
+			oDamageFile.description = dmgfiledescription.toString();
+			oDamageFile.incident_date = dmgfileincident_date;
+			oDamageFile.time = dmgfiletime;
+			oDamageFile.total_damage = dmgtotalDamage;
+
+			var that = this;
+			
+			that.getView().getModel("damageFileService").create("/ZINS_C_DMGFILETP", oDamageFile, {
+				success: function (oResponse) {
+					MessageToast.show(oBundle.getText("postdamagefileSucces"));
+					this.onClearDamageFileData();
+				}.bind(this),
+				error: function () {
+					MessageToast.show(oBundle.getText("postdamagefileError"));
+				}
+			});
+		} else {
+			MessageToast.show(oBundle.getText("postdamagefileInvalidInput"));
+		}
+	},
+
+	_validateEntry: function(oEvent){
+		var oView = this.getView(),
+			isOkay = true,
+			myDate = new Date(),
+			sMsg = this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("fieldErrorMessage"),
+			customerText = oView.byId("dmgfileCustomer").getValue();
+
+			if(customerText === ""){
+				oView.byId("dmgfileCustomer").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("dmgfileCustomer").setValueStateText(sMsg);
+				isOkay = false;
+			} else{
+				oView.byId("dmgfileCustomer").setValueState(sap.ui.core.ValueState.None);
+			}
+
+			var damageCounty = oView.byId("dmgfilecounty").getSelectedItem();
+			if (damageCounty == null) {
+				oView.byId("dmgfilecounty").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("dmgfilecounty").setValueStateText(sMsg);
+				isOkay = false;
+			} else {
+				oView.byId("dmgfilecounty").setValueState(sap.ui.core.ValueState.None);
+			}
+
+			var damageDescription = oView.byId("dmgfiledescription").getValue();
+			if (damageDescription === "") {
+				oView.byId("dmgfiledescription").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("dmgfiledescription").setValueStateText(sMsg);
+				isOkay = false;
+			} else{
+				oView.byId("dmgfiledescription").setValueState(sap.ui.core.ValueState.None);
+			}
+
+			var insuredCar = oView.byId("insuredCar").getValue();
+			if(insuredCar === ""){
+				oView.byId("insuredCar").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("insuredCar").setValueStateText(sMsg);
+				isOkay = false;
+			} else{
+				oView.byId("insuredCar").setValueState(sap.ui.core.ValueState.None);
+			}
+
+			var testTime = oView.byId("dmgfiletime").getDateValue();
+			if (testTime === null) {
+				oView.byId("dmgfiletime").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("dmgfiletime").setValueStateText(sMsg);
+				isOkay = false;
+			} else {
+				oView.byId("dmgfiletime").setValueState(sap.ui.core.ValueState.None);
+			}
+			var filedate = oView.byId("dmgfiledate").getDateValue();
+			if(filedate === null){
+				oView.byId("dmgfiledate").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("dmgfiledate").setValueStateText(sMsg);
+				isOkay = false;
+			} else if(filedate > myDate)
+			{
+				oView.byId("dmgfiledate").setValueState(sap.ui.core.ValueState.Error);
+				oView.byId("dmgfiledate").setValueStateText(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("invalidDate"));
+				isOkay = false;
+			}
+			else{
+				oView.byId("dmgfiledate").setValueState(sap.ui.core.ValueState.None);
+			}
+			return isOkay;
+
+	}
 	});
 });

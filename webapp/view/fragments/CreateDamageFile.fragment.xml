@@ -1,11 +1,168 @@
-<core:FragmentDefinition xmlns:core="sap.ui.core" 
-    xmlns="sap.m" 
-    xmlns:form="sap.ui.layout.form" 
-    xmlns:u="sap.ui.unified">
-    <App>
-        <Page title="{i18n>createDamageFilesTitle}" showHeader="true">
-            <content>
-            </content>
-        </Page>
-    </App>
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<App>
+		<Page title="{i18n>createDamageFileLabel}" showHeader="true">
+			<content>
+				<form:SimpleForm editable="true">
+					<VBox width="100%">
+						<VBox class="DamageFileForm">
+							<VBox width="50%">
+							    <CheckBox id="checkUpload" select ="checkUpload" text="{i18n>checkboxTextUpload}"></CheckBox>
+								<u:FileUploader  useMultipart="false" id="fileUploader" name="myFileUpload" tooltip="{i18n>tooltipUpload}" uploadComplete="_handleUploadComplete"
+					            	  change="_handleValueChange" placeholder="{i18n>tooltipUpload}"/>
+
+				             	<Button visible = "hidden" id= "uploadButton" text="{i18n>uploadButton}" press="._handleUploadPress"/>
+								  
+                                <Label text="{i18n>createdmgfileCustomer}" required="true"></Label>
+                                <Input
+                                    id="dmgfileCustomer"
+                                    type="Text"
+                                    textFormatMode="ValueKey"
+                                    placeholder="{i18n>CustomerInputPlaceholder}"
+                                    showSuggestion="true"
+                                    submit="_onSubmitSelection"
+                                    showTableSuggestionValueHelp="false"
+                                    maxSuggestionWidth="70%"
+                                    suggestionRows="{path: 'customerService>/ZINS_C_CUSTOMERTP' }"
+                                    suggestionItemSelected="_suggestionItemSelected">
+                                    <suggestionColumns>
+                                        <Column
+                                            hAlign="Begin"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>CustomerIDHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Begin"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>CustomerLastNameHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Begin"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>CustomerFirstNameHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Center"
+                                            popinDisplay="Inline"
+                                            demandPopin="true"
+                                            minScreenWidth="Tablet">
+                                            <Label text="{i18n>CustomerCNPHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Center"
+                                            popinDisplay="Inline"
+                                            demandPopin="false"
+                                            minScreenWidth="Tablet">
+                                            <Label text="{i18n>CustomerAdressHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="End"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>CustomerCountyNameHeader}"/>
+                                        </Column>
+                                    </suggestionColumns>
+                                    <suggestionRows>
+                                        <ColumnListItem>
+                                        <cells>
+                                            <Label text="{customerService>cust_id}"/>
+                                            <Label text="{customerService>last_name}"/>
+                                            <Label text="{customerService>first_name}"/>
+                                            <Label text="{customerService>cnp}"/>
+                                            <Label text="{customerService>adress}"/>
+                                            <Label text="{customerService>county_name}"/>
+                                        </cells>
+                                        </ColumnListItem>
+                                    </suggestionRows>
+                                </Input>
+                                <Label text="{i18n>customerSelected}"/>
+                                <Text id="selectedKey" />
+                                <Label text="{i18n>createdmgfileCounty}" required="true"></Label>
+								<Select id="dmgfilecounty" change="onSelectChange" forceSelection="false" items="{
+                                                    path: 'countyService>/ZINS_C_COUNTYTP', sorter: { path: 'county_name'}
+                                                 }">
+                                                <core:Item key="{countyService>county_id}" text="{countyService>county_name}"/>
+                                            </Select>
+								<Label text="{i18n>createdmgfileDescription}" textAlign="Left" required="true" ></Label>
+								<TextArea id="dmgfiledescription" placeholder="{i18n>placeholderDmgfileDescription}" width="100%"></TextArea>
+
+                                <Label id="dmgfileCar" text="{i18n>createdmgfileCar}" required="true" visible="false"></Label>
+								<Input
+                                    id="insuredCar"
+                                    type="Text"
+                                    textFormatMode="ValueKey"
+                                    placeholder="{i18n>InsuredCarPlaceholder}"
+                                    visible="false"
+                                    showSuggestion="true"
+                                    showTableSuggestionValueHelp="false"
+                                    maxSuggestionWidth="70%"
+                                    suggestionRows="{path: 'InsuredCar>/aEntries' }">
+                                    <suggestionColumns>
+                                        <Column
+                                            hAlign="Begin"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>InsuredCarIDHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Begin"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>InsuredCarNumberPlateHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Begin"
+                                            popinDisplay="Inline"
+                                            demandPopin="true">
+                                            <Label text="{i18n>InsuredCarMakeHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Center"
+                                            popinDisplay="Inline"
+                                            demandPopin="true"
+                                            minScreenWidth="Tablet">
+                                            <Label text="{i18n>InsuredCarModelHeader}"/>
+                                        </Column>
+                                        <Column
+                                            hAlign="Center"
+                                            popinDisplay="Inline"
+                                            demandPopin="false"
+                                            minScreenWidth="Tablet">
+                                            <Label text="{i18n>InsuredCarEngineCapHeader}"/>
+                                        </Column>
+                                    </suggestionColumns>
+                                    <suggestionRows>
+                                        <ColumnListItem>
+                                        <cells>
+                                            <Label text="{InsuredCar>ins_car_id}"/>
+                                            <Label text="{InsuredCar>number_plate}"/>
+                                            <Label text="{InsuredCar>car_name}"/>
+                                            <Label text="{InsuredCar>model_name}"/>
+                                            <Label text="{InsuredCar>engine_capacity}"/>
+                                        </cells>
+                                        </ColumnListItem>
+                                    </suggestionRows>
+                                </Input>
+								<Label text="{i18n>createdmgfileDate}" required="true"></Label>
+								<DatePicker  id="dmgfiledate" ></DatePicker>
+
+                                <Label text="{i18n>createdmgfileTime}" textAlign="Left" required="true" width="100%"></Label>
+								<TimePicker id="dmgfiletime"></TimePicker>
+
+								<Label text="{i18n>createdmgfileTotalDamage}"></Label>
+                                <CheckBox id="dmgfileTotalDamage" selected="false" enabled="true" ></CheckBox>
+
+							</VBox>
+							<VBox width="50%">
+								<Label text="{i18n>createdmgfileCompensation}"></Label>
+								<Input id="damageFileCompensationID" placeholder="{i18n>placeholderCompensation}" type="Number" description="RON"></Input>
+							</VBox>
+						</VBox>
+					</VBox>
+				</form:SimpleForm>
+			</content>
+		</Page>
+	</App>
 </core:FragmentDefinition>

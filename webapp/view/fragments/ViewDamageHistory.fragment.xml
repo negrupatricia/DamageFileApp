@@ -91,7 +91,7 @@
                                                 <Text text="{path:'DamageHist>incident_date', type: 'sap.ui.model.type.Date'}"/>
                                                 <Text text="{DamageHist>total_damage}"/>
                                                 <Text text="{DamageHist>compensation} RON"/>
-                                                <Text text="{path:'DamageHist>isarchived'}"/>
+                                                <ObjectStatus state="{= ${DamageHist>isarchived} === 'Closed' ? 'Error' : 'Success'}" text="{DamageHist>isarchived}" inverted="true"/>
                                             </cells>
                                         </ColumnListItem>
                                     </items>
