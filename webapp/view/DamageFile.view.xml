@@ -13,9 +13,11 @@
 							<tnt:NavigationListItem id="viewDamageFileNavigationID" text="{i18n>viewDamageFileLabel}" icon="sap-icon://detail-view" key="viewDamageFileKey"></tnt:NavigationListItem>
 							<tnt:NavigationListItem id="createDamageFileID" text="{i18n>createDamageFileLabel}" icon="sap-icon://collision" key="createDamageFileKey"></tnt:NavigationListItem>
 							<tnt:NavigationListItem id="viewDamageHistoryID" text="{i18n>viewDamageHistoryFileLabel}" icon="sap-icon://activity-individual" key="viewDamageHistoryFileKey"></tnt:NavigationListItem>
-							<tnt:NavigationListItem id="dataAnalysisID" text="{i18n>dataAnalysisLabel}" icon="sap-icon://filter-analytics" key="dataAnalysisFileKey"></tnt:NavigationListItem>
-							<tnt:NavigationListItem id="customerAgeChartID" text="{i18n>customerAgeChartLabel}" icon="sap-icon://filter-analytics" key="customerAgeFileKey"></tnt:NavigationListItem>
-							<tnt:NavigationListItem id="damageAgeChartID" text="{i18n>damageAgeChartLabel}" icon="sap-icon://filter-analytics" key="damageAgeFileKey"></tnt:NavigationListItem>
+							<tnt:NavigationListItem id="dataAnalysisID" text="{i18n>dataAnalysisLabel}" icon="sap-icon://filter-analytics" expanded="false" key="dataAnalysisFileKey">
+								<tnt:NavigationListItem id="customerAccidentChartID" text="{i18n>customerAccidentChartLabel}" icon="sap-icon://filter-analytics" key="customerAccidentChartFileKey"></tnt:NavigationListItem>
+								<tnt:NavigationListItem id="customerAgeChartID" text="{i18n>customerAgeChartLabel}" icon="sap-icon://filter-analytics" key="customerAgeFileKey"></tnt:NavigationListItem>
+								<tnt:NavigationListItem id="damageAgeChartID" text="{i18n>damageAgeChartLabel}" icon="sap-icon://filter-analytics" key="damageAgeFileKey"></tnt:NavigationListItem>
+							</tnt:NavigationListItem>
 						</tnt:NavigationList>
 					</tnt:SideNavigation>
 				</tnt:sideContent>
@@ -31,7 +33,7 @@
 							<ScrollContainer id="viewDamageHistoryFileKey" height="90%">
 								<core:Fragment fragmentName="damageFile.view.fragments.ViewDamageHistory" type="XML"/>
 							</ScrollContainer>
-							<ScrollContainer id="dataAnalysisFileKey" height="90%">
+							<ScrollContainer id="customerAccidentChartFileKey" height="90%">
 								<core:Fragment fragmentName="damageFile.view.fragments.ViewChartDataAnalysis" type="XML"/>
 							</ScrollContainer>
 							<ScrollContainer id="customerAgeFileKey" height="90%">
