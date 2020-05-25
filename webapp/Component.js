@@ -1,11 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
-	"damageFile/DamageFiles/model/models"
+	"damageFile/model/models"
 ], function (UIComponent, Device, models) {
 	"use strict";
 
-	return UIComponent.extend("damageFile.DamageFiles.Component", {
+	return UIComponent.extend("damageFile.Component", {
 
 		metadata: {
 			manifest: "json"

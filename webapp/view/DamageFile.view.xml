@@ -1,4 +1,4 @@
-<mvc:View controllerName="damageFile.DamageFiles.controller.DamageFile" 
+<mvc:View controllerName="damageFile.controller.DamageFile" 
 	xmlns:mvc="sap.ui.core.mvc" 
 	xmlns:core="sap.ui.core" 
 	xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true" 
@@ -23,22 +23,22 @@
 					<NavContainer id="welcomePageContainer" initialPage="viewDamageFileKey">
 						<pages>
 							<ScrollContainer id="viewDamageFileKey" height="90%">
-								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewDamageFile" type="XML"/>
+								<core:Fragment fragmentName="damageFile.view.fragments.ViewDamageFile" type="XML"/>
 							</ScrollContainer>
 							<ScrollContainer id="createDamageFileKey" height="90%">
-								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.CreateDamageFile" type="XML"/>
+								<core:Fragment fragmentName="damageFile.view.fragments.CreateDamageFile" type="XML"/>
 							</ScrollContainer>
 							<ScrollContainer id="viewDamageHistoryFileKey" height="90%">
-								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewDamageHistory" type="XML"/>
+								<core:Fragment fragmentName="damageFile.view.fragments.ViewDamageHistory" type="XML"/>
 							</ScrollContainer>
 							<ScrollContainer id="dataAnalysisFileKey" height="90%">
-								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewChartDataAnalysis" type="XML"/>
+								<core:Fragment fragmentName="damageFile.view.fragments.ViewChartDataAnalysis" type="XML"/>
 							</ScrollContainer>
 							<ScrollContainer id="customerAgeFileKey" height="90%">
-								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewCustomerAgeChart" type="XML"/>
+								<core:Fragment fragmentName="damageFile.view.fragments.ViewCustomerAgeChart" type="XML"/>
 							</ScrollContainer>
 							<ScrollContainer id="damageAgeFileKey" height="90%">
-								<core:Fragment fragmentName="damageFile.DamageFiles.view.fragments.ViewDamageAgeChart" type="XML"/>
+								<core:Fragment fragmentName="damageFile.view.fragments.ViewDamageAgeChart" type="XML"/>
 							</ScrollContainer>
 						</pages>
 					</NavContainer>

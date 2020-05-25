@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Unit tests</title>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'/>
-    <meta charset="UTF-8">
+	<title>Unit tests</title>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+	<meta charset="UTF-8">
 
-    <script id="sap-ui-bootstrap"
-            src="../../../resources/sap-ui-core.js"
-            data-sap-ui-libs="sap.m"
-            data-sap-ui-resourceroots='{
-				"damageFile/DamageFiles": "../../",
-				"damageFile/DamageFiles/test/unit": "./"
+	<script id="sap-ui-bootstrap" src="../../../resources/sap-ui-core.js" data-sap-ui-libs="sap.m"
+		data-sap-ui-resourceroots='{
+				"damageFile": "../../",
+				"damageFile/test/unit": "./"
 			}'>
-    </script>
+			</script>
 
-    <script>
+	<script>
 		jQuery.sap.require("sap.ui.qunit.qunit-css");
 		jQuery.sap.require("sap.ui.thirdparty.qunit");
 		jQuery.sap.require("sap.ui.qunit.qunit-junit");
@@ -22,16 +21,18 @@
 		QUnit.config.autostart = false;
 
 		sap.ui.require(
-			["damageFile/DamageFiles/test/unit/allTests"],
-			function() {
+			["damageFile/test/unit/allTests"],
+			function () {
 				QUnit.start();
 			}
 		);
-    </script>
+	</script>
 
 </head>
+
 <body>
-<div id="qunit"></div>
-<div id="qunit-fixture"></div>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
 </body>
+
 </html>

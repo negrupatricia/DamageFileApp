@@ -1,7 +1,7 @@
 /*global QUnit*/
 sap.ui.define([
 	"sap/ui/test/opaQunit",
-	"damageFile/DamageFiles/test/integration/pages/DamageFile"
+	"damageFile/test/integration/pages/DamageFile"
 ], function (opaTest) {
 	"use strict";
 

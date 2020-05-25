@@ -1,7 +1,7 @@
 {
 	"_version": "1.8.0",
 	"sap.app": {
-		"id": "damageFile.DamageFiles",
+		"id": "damageFile",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -78,7 +78,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "damageFile.DamageFiles.view.DamageFile",
+			"viewName": "damageFile.view.DamageFile",
 			"type": "XML"
 		},
 		"dependencies": {
@@ -97,7 +97,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "damageFile.DamageFiles.i18n.i18n"
+					"bundleName": "damageFile.i18n.i18n"
 				}
 			},
 			"damageFileService": {
@@ -128,7 +128,7 @@
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
 				"async": true,
-				"viewPath": "damageFile.DamageFiles.view",
+				"viewPath": "damageFile.view",
 				"controlAggregation": "pages",
 				"controlId": "idAppControl",
 				"clearControlAggregation": false

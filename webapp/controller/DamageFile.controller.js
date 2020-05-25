@@ -9,7 +9,7 @@ sap.ui.define([
 	"use strict";
 	jQuery.sap.require('sap.m.MessageToast');
 
-	return Controller.extend("damageFile.DamageFiles.controller.DamageFile", {
+	return Controller.extend("damageFile.controller.DamageFile", {
 
 		onInit: function () {
 
@@ -218,7 +218,7 @@ sap.ui.define([
 
 			if (!this.customerData) {
 				this.customerData = sap.ui.xmlfragment("customerData",
-					"damageFile.DamageFiles.view.fragments.CustomerDataTable", this);
+					"damageFile.view.fragments.CustomerDataTable", this);
 				this.getView().addDependent(this.customerData);
 			}
 			return this.customerData;
@@ -338,7 +338,7 @@ sap.ui.define([
 
 			if (!this.sortCustomerData) {
 				this.sortCustomerData = sap.ui.xmlfragment("sortCustomerData",
-					"damageFile.DamageFiles.view.fragments.SortCustomerDataTable", this);
+					"damageFile.view.fragments.SortCustomerDataTable", this);
 				this.getView().addDependent(this.sortCustomerData);
 			}
 			return this.sortCustomerData;
@@ -462,7 +462,7 @@ sap.ui.define([
 
 			if (!this.damageFileDetailsDialog) {
 				this.damageFileDetailsDialog = sap.ui.xmlfragment("damageFileDetailsDialog",
-					"damageFile.DamageFiles.view.fragments.ViewDamageFileDetails", this);
+					"damageFile.view.fragments.ViewDamageFileDetails", this);
 				this.getView().addDependent(this.damageFileDetailsDialog);
 			}
 			return this.damageFileDetailsDialog;
@@ -472,7 +472,7 @@ sap.ui.define([
 
 			if (!this.editDamageFileDetailsDialog) {
 				this.editDamageFileDetailsDialog = sap.ui.xmlfragment("editDamageFileDetailsDialog",
-					"damageFile.DamageFiles.view.fragments.EditDamageFileDetails", this);
+					"damageFile.view.fragments.EditDamageFileDetails", this);
 				this.getView().addDependent(this.editDamageFileDetailsDialog);
 			}
 			return this.editDamageFileDetailsDialog;
