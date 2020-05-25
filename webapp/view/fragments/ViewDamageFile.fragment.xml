@@ -34,7 +34,6 @@
                                 </headerToolbar>
                                 <columns>
                                     <Column visible="hidden">
-                                        <header></header>
                                     </Column>
                                     <Column visible="hidden">
                                     </Column>

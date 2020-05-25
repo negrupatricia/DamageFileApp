@@ -20,23 +20,6 @@ sap.ui.define([
 			oView.setModel(this.getOwnerComponent().getModel("carMakeService"), "carMakeService");
 			oView.setModel(this.getOwnerComponent().getModel("carPolicyService"), "carPolicyService");
 
-			// var oCustomerAgeModel = new JSONModel({
-			// 	"pieData": [
-			// 		{
-			// 			"group": "18-30 years",
-			// 			"procentage": "30"
-			// 		},
-			// 		{
-			// 			"group": "31-60 years",
-			// 			"procentage": "20"
-			// 		},
-			// 		{
-			// 			"group": ">60 years",
-			// 			"procentage": "10"
-			// 		}]
-			// })
-			// oView.setModel(oCustomerAgeModel, "oCustomerAgeModel");
-
 			var DamageHist = new JSONModel({
 				aEntries: []
 			});
@@ -46,7 +29,10 @@ sap.ui.define([
 			});
 			oView.setModel(InsuredCar, "InsuredCar");
 			var oButtonsModel = new JSONModel({
-				enabledArchiveDamageFile: true
+				enabledArchiveDamageFile: true,
+				enabledCreateDamageFile: false,
+				enabledClearDamageFile: false
+
 			});
 			oView.setModel(oButtonsModel, "oButtonsModel");
 			var young = 0, medium = 0, senior = 0;
@@ -88,6 +74,49 @@ sap.ui.define([
 
 			var oInputInsuredCar = this.byId('insuredCar');
 			oInput.setSuggestionRowValidator(this.suggestionRowValidatorInsuredCar);
+
+			oView.getModel("damageFileService").read("/ZINS_C_DMGFILETP", {
+				method: "GET",
+				success: function (oData) {
+					for (var i = 0; i < oData.results.length; i++) {
+						oView.getModel("customerService").read("/ZINS_C_CUSTOMERTP(" + oData.results[i].cust_id + ")", {
+							method: "GET",
+							success: function (oDataC) {
+								if (parseInt(oDataC.age) > 17 && parseInt(oDataC.age) < 31) {
+									young++;
+								} else if (parseInt(oDataC.age) > 30 && parseInt(oCData.age) < 61) {
+									medium++;
+								} else {
+									senior++;
+								}
+								var oDamageCustomerAgeModel = new JSONModel({
+									"pieData": [
+										{
+											"group": "18-30 years",
+											"percentage": young
+										},
+										{
+											"group": "31-60 years",
+											"percentage": medium
+										},
+										{
+											"group": ">60 years",
+											"percentage": senior
+										}]
+								})
+								oView.setModel(oDamageCustomerAgeModel, "oDamageCustomerAgeModel");
+
+							}.bind(this),
+							error: function (oError) {
+							}
+						});
+
+					}
+				}.bind(this),
+				error: function (oError) {
+
+				}
+			})
 		},
 
 		_enableButtons: function (oEvent) {
@@ -620,174 +649,178 @@ sap.ui.define([
 			});
 		},
 
-	suggestionRowValidator: function (oColumnListItem) {
+		suggestionRowValidator: function (oColumnListItem) {
 			var aCells = oColumnListItem.getCells();
 
 			return new sap.ui.core.Item({
 				key: aCells[0].getText(),
 				text: aCells[1].getText()
 			});
-	},
+		},
 
-	_suggestionItemSelected: function (evt) {
+		_suggestionItemSelected: function (evt) {
 
-		var oInput = this.byId('dmgfileCustomer'),
-			oText = this.byId('selectedKey'),
-			sKey = oInput.getSelectedKey();
+			var oInput = this.byId('dmgfileCustomer'),
+				oText = this.byId('selectedKey'),
+				sKey = oInput.getSelectedKey();
 
-		oText.setText(sKey);
-	},
+			oText.setText(sKey);
+		},
 
-	_onSubmitSelection: function(oEvent){
-		var oLabel = this.byId('dmgfileCar').setVisible(true),
-			oInputInsuredCar = this.byId('insuredCar').setVisible(true),
-			oInput = this.byId('dmgfileCustomer'),
-			sKey = oInput.getSelectedKey(),
-			oFilterCustID = new Filter("cust_id", FilterOperator.EQ, sKey),
-			that = this,
-			aActivePolicies = [],
-			myDate = new Date(),
-			hasActivePolicy = 0;
+		_onSubmitSelection: function (oEvent) {
+			var oLabel = this.byId('dmgfileCar').setVisible(true),
+				oInputInsuredCar = this.byId('insuredCar').setVisible(true),
+				oInput = this.byId('dmgfileCustomer'),
+				sKey = oInput.getSelectedKey(),
+				oFilterCustID = new Filter("cust_id", FilterOperator.EQ, sKey),
+				that = this,
+				aActivePolicies = [],
+				myDate = new Date(),
+				hasActivePolicy = 0;
 
-				that.getView().getModel("carPolicyService").read("/ZINS_C_CARPOLICYTP", {
-					method: "GET",
-					filters: [oFilterCustID],
-					success: function (oData) {
-						if(oData.results.length == 0){
-							that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.Error);
-							that.byId('dmgfileCustomer').setValueStateText("The selected user does not have a policy!");
-						}
-						else{
-							that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.None);
-							hasActivePolicy = 0;
-							for(var i = 0; i < oData.results.length; i++){
-								if(oData.results[i]["end_date"] > myDate){
-									hasActivePolicy = 1;
-									aActivePolicies.push(oData.results[i]["policy_id"]);
-								}
-							}
-
-							if(hasActivePolicy === 0)
-							{
-								that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.Error);
-								that.byId('dmgfileCustomer').setValueStateText("The selected user does not have an active policy!");
-							}
-							else{
-								this._findInsuredCars(aActivePolicies);
-							}
-						}
-					}.bind(this),
-					error: function () {
-						MessageToast.show("The selected user does not exist!");
-					}
-				});
-		
-	},
-	_findInsuredCars: function(aActivePolicies){
-		var oView = this.getView();
-		oView.getModel("InsuredCar").getData().aEntries = [];
-
-		for(var i = 0; i< aActivePolicies.length; i++){
-			oView.getModel("carPolicyService").read("/ZINS_C_CARPOLICYTP("+ aActivePolicies[i] +
-			 ")/to_InsuredCar",{
+			that.getView().getModel("carPolicyService").read("/ZINS_C_CARPOLICYTP", {
 				method: "GET",
+				filters: [oFilterCustID],
 				success: function (oData) {
-					oView.getModel("InsuredCar").getProperty("/aEntries").push(oData.results[0]);
-					oView.getModel("InsuredCar").refresh();
-				},
+					if (oData.results.length == 0) {
+						that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.Error);
+						that.byId('dmgfileCustomer').setValueStateText("The selected user does not have a policy!");
+					}
+					else {
+						that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.None);
+						hasActivePolicy = 0;
+						for (var i = 0; i < oData.results.length; i++) {
+							if (oData.results[i]["end_date"] > myDate) {
+								hasActivePolicy = 1;
+								aActivePolicies.push(oData.results[i]["policy_id"]);
+							}
+						}
+
+						if (hasActivePolicy === 0) {
+							that.byId('dmgfileCustomer').setValueState(sap.ui.core.ValueState.Error);
+							that.byId('dmgfileCustomer').setValueStateText("The selected user does not have an active policy!");
+						}
+						else {
+							this._findInsuredCars(aActivePolicies);
+						}
+					}
+				}.bind(this),
 				error: function () {
 					MessageToast.show("The selected user does not exist!");
 				}
 			});
-		}
-	},
-	suggestionRowValidatorInsuredCar: function (oColumnListItem) {
-		var aCells = oColumnListItem.getCells();
 
-		return new sap.ui.core.Item({
-			key: aCells[0].getText(),
-			text: aCells[1].getText()
-		});
-	},
-	onClearDamageFileData: function () {
-		var oView = this.getView();  
-		this.byId('dmgfileCustomer').setValue("");
-		this.byId('selectedKey').setText("");
-		this.byId('dmgfilecounty').setSelectedItem(null);
-		this.byId('dmgfiledescription').setValue();
-		this.byId('dmgfileCar').setVisible(false);
-		this.byId('insuredCar').setValue("");
-		this.byId('insuredCar').setVisible(false);
-		this.byId('dmgfiledate').setValue(null);
-		this.byId('dmgfiletime').setValue(null);
-		this.byId('dmgfileTotalDamage').setSelected(false);
-		this.byId('damageFileCompensationID').setValue(null);
-	},
-	onCreateDamageFile: function () {
-		var oView = this.getView(),
-			oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+		},
+		_findInsuredCars: function (aActivePolicies) {
+			var oView = this.getView();
+			oView.getModel("InsuredCar").getData().aEntries = [];
 
-		if (this._validateEntry() === true) {
-			var oDamageFile = {};
+			for (var i = 0; i < aActivePolicies.length; i++) {
+				oView.getModel("carPolicyService").read("/ZINS_C_CARPOLICYTP(" + aActivePolicies[i] +
+					")/to_InsuredCar", {
+					method: "GET",
+					success: function (oData) {
+						oView.getModel("InsuredCar").getProperty("/aEntries").push(oData.results[0]);
+						oView.getModel("InsuredCar").refresh();
+					},
+					error: function () {
+						MessageToast.show("The selected user does not exist!");
+					}
+				});
+			}
+		},
+		suggestionRowValidatorInsuredCar: function (oColumnListItem) {
+			var aCells = oColumnListItem.getCells();
 
-			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-ddTHH:mm:ss" });
-			var dmgfileincident_date = oDateFormat.format(new Date(oView.byId("dmgfiledate").getValue())); 
+			return new sap.ui.core.Item({
+				key: aCells[0].getText(),
+				text: aCells[1].getText()
+			});
+		},
+		onClearDamageFileData: function () {
+			var oView = this.getView();
+			this.byId('dmgfileCustomer').setValue("");
+			this.byId('selectedKey').setText("");
+			this.byId('dmgfilecounty').setSelectedItem(null);
+			this.byId('dmgfiledescription').setValue();
+			this.byId('dmgfileCar').setVisible(false);
+			this.byId('insuredCar').setValue("");
+			this.byId('insuredCar').setVisible(false);
+			this.byId('dmgfiledate').setValue(null);
+			this.byId('dmgfiletime').setValue(null);
+			this.byId('dmgfileTotalDamage').setSelected(false);
+			this.byId('damageFileCompensationID').setValue(null);
+		},
+		onCreateDamageFile: function () {
+			var oView = this.getView(),
+				oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 
-			var oTimeFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern : "PTHH'H'mm'M'ss'S'"});
-			var dmgfiletime = oTimeFormat.format(new Date(oView.byId('dmgfiletime').getDateValue()));
+			if (this._validateEntry() === true) {
+				var oDamageFile = {};
 
-			var dmgfilecompensation = oView.byId('damageFileCompensationID').getValue(),
-				dmgfilecounty = oView.byId('dmgfilecounty').getSelectedKey(),
-				dmgfilecust_id = oView.byId('dmgfileCustomer').getSelectedKey(),
-				dmgfileins_car_id = oView.byId('insuredCar').getValue(),
-				dmgfiledescription = oView.byId('dmgfiledescription').getValue(),
-				damageFileTotalDamage = oView.byId('dmgfileTotalDamage').getSelected(),
-				dmgtotalDamage;
+				var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({ pattern: "yyyy-MM-ddTHH:mm:ss" });
+				var dmgfileincident_date = oDateFormat.format(new Date(oView.byId("dmgfiledate").getDateValue()));
+
+				var oTimeFormat = sap.ui.core.format.DateFormat.getTimeInstance({ pattern: "PTHH'H'mm'M'ss'S'" });
+				var dmgfiletime = oTimeFormat.format(new Date(oView.byId('dmgfiletime').getDateValue()));
+
+				if (oView.byId('damageFileCompensationID').getValue() == '') {
+					var dmgfilecompensation = "0";
+				} else {
+					var dmgfilecompensation = oView.byId('damageFileCompensationID').getValue();
+				}
+
+				var dmgfilecounty = oView.byId('dmgfilecounty').getSelectedKey(),
+					dmgfilecust_id = oView.byId('dmgfileCustomer').getSelectedKey(),
+					dmgfileins_car_id = oView.byId('insuredCar').getValue(),
+					dmgfiledescription = oView.byId('dmgfiledescription').getValue(),
+					damageFileTotalDamage = oView.byId('dmgfileTotalDamage').getSelected(),
+					dmgtotalDamage;
 
 				if (damageFileTotalDamage === true) {
 					dmgtotalDamage = "X";
 				} else {
 					dmgtotalDamage = "";
 				}
-				
 
-			oDamageFile.compensation = dmgfilecompensation;
-			oDamageFile.county = parseInt(dmgfilecounty);
-			oDamageFile.cust_id = parseInt(dmgfilecust_id);
-			oDamageFile.ins_car_id = parseInt(dmgfileins_car_id);
-			oDamageFile.description = dmgfiledescription.toString();
-			oDamageFile.incident_date = dmgfileincident_date;
-			oDamageFile.time = dmgfiletime;
-			oDamageFile.total_damage = dmgtotalDamage;
 
-			var that = this;
-			
-			that.getView().getModel("damageFileService").create("/ZINS_C_DMGFILETP", oDamageFile, {
-				success: function (oResponse) {
-					MessageToast.show(oBundle.getText("postdamagefileSucces"));
-					this.onClearDamageFileData();
-				}.bind(this),
-				error: function () {
-					MessageToast.show(oBundle.getText("postdamagefileError"));
-				}
-			});
-		} else {
-			MessageToast.show(oBundle.getText("postdamagefileInvalidInput"));
-		}
-	},
+				oDamageFile.compensation = dmgfilecompensation;
+				oDamageFile.county = parseInt(dmgfilecounty);
+				oDamageFile.cust_id = parseInt(dmgfilecust_id);
+				oDamageFile.ins_car_id = parseInt(dmgfileins_car_id);
+				oDamageFile.description = dmgfiledescription.toString();
+				oDamageFile.incident_date = dmgfileincident_date;
+				oDamageFile.time = dmgfiletime;
+				oDamageFile.total_damage = dmgtotalDamage;
 
-	_validateEntry: function(oEvent){
-		var oView = this.getView(),
-			isOkay = true,
-			myDate = new Date(),
-			sMsg = this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("fieldErrorMessage"),
-			customerText = oView.byId("dmgfileCustomer").getValue();
+				var that = this;
 
-			if(customerText === ""){
+				that.getView().getModel("damageFileService").create("/ZINS_C_DMGFILETP", oDamageFile, {
+					success: function (oResponse) {
+						MessageToast.show(oBundle.getText("postdamagefileSucces"));
+						this.onClearDamageFileData();
+					}.bind(this),
+					error: function () {
+						MessageToast.show(oBundle.getText("postdamagefileError"));
+					}
+				});
+			} else {
+				MessageToast.show(oBundle.getText("postdamagefileInvalidInput"));
+			}
+		},
+
+		_validateEntry: function (oEvent) {
+			var oView = this.getView(),
+				isOkay = true,
+				myDate = new Date(),
+				sMsg = this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("fieldErrorMessage"),
+				customerText = oView.byId("dmgfileCustomer").getValue();
+
+			if (customerText === "") {
 				oView.byId("dmgfileCustomer").setValueState(sap.ui.core.ValueState.Error);
 				oView.byId("dmgfileCustomer").setValueStateText(sMsg);
 				isOkay = false;
-			} else{
+			} else {
 				oView.byId("dmgfileCustomer").setValueState(sap.ui.core.ValueState.None);
 			}
 
@@ -805,16 +838,16 @@ sap.ui.define([
 				oView.byId("dmgfiledescription").setValueState(sap.ui.core.ValueState.Error);
 				oView.byId("dmgfiledescription").setValueStateText(sMsg);
 				isOkay = false;
-			} else{
+			} else {
 				oView.byId("dmgfiledescription").setValueState(sap.ui.core.ValueState.None);
 			}
 
 			var insuredCar = oView.byId("insuredCar").getValue();
-			if(insuredCar === ""){
+			if (insuredCar === "") {
 				oView.byId("insuredCar").setValueState(sap.ui.core.ValueState.Error);
 				oView.byId("insuredCar").setValueStateText(sMsg);
 				isOkay = false;
-			} else{
+			} else {
 				oView.byId("insuredCar").setValueState(sap.ui.core.ValueState.None);
 			}
 
@@ -827,21 +860,20 @@ sap.ui.define([
 				oView.byId("dmgfiletime").setValueState(sap.ui.core.ValueState.None);
 			}
 			var filedate = oView.byId("dmgfiledate").getDateValue();
-			if(filedate === null){
+			if (filedate === null) {
 				oView.byId("dmgfiledate").setValueState(sap.ui.core.ValueState.Error);
 				oView.byId("dmgfiledate").setValueStateText(sMsg);
 				isOkay = false;
-			} else if(filedate > myDate)
-			{
+			} else if (filedate > myDate) {
 				oView.byId("dmgfiledate").setValueState(sap.ui.core.ValueState.Error);
 				oView.byId("dmgfiledate").setValueStateText(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("invalidDate"));
 				isOkay = false;
 			}
-			else{
+			else {
 				oView.byId("dmgfiledate").setValueState(sap.ui.core.ValueState.None);
 			}
 			return isOkay;
 
-	}
+		}
 	});
 });
